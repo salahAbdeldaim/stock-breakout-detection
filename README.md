@@ -64,11 +64,13 @@ The dataset comprises **3,474 validated breakout events** across **50 liquid US 
 
 Evaluated on the out-of-sample chronological test partition (**March 2021 to July 2026 - 695 events**):
 
-| Model | Accuracy | ROC-AUC | Breakout Precision (Win Rate) | Breakout Recall | F1-Score |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **XGBoost Classifier** | **`82.30%`** | **`0.6565`** | **`83.1%`** | **`98.8%`** | **`0.90`** |
-| **HistGradientBoosting** | `68.92%` | `0.6621` | `87.0%` | `73.0%` | `0.80` |
-| **Random Forest (Balanced)** | `66.62%` | `0.6658` | `88.0%` | `69.0%` | `0.78` |
+| Model Configuration | Overall Accuracy | ROC-AUC | Breakout Win Rate (Prec) | Breakout Recall | Fakeout Traps Caught (Rec) | Strategy Profile |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **XGBoost (Standard $w=1.0$)** | **`81.87%`** | **`0.6681`** | **`82.9%`** | **`98.8%`** | `0.9%` | Maximum Market Capture |
+| **XGBoost (Cost-Sensitive $w=3.0$)** | `72.95%` | **`0.6647`** | **`85.4%`** | `79.0%` | **`32.2%`** | Optimal Balanced Sweet Spot |
+| **XGBoost (Full Balanced $w=4.67$)** | `63.17%` | **`0.6675`** | **`88.5%`** | `64.0%` | **`59.3%`** | Maximum Trap Avoidance |
+| **HistGradientBoosting** | `68.92%` | `0.6621` | `87.0%` | `73.0%` | `47.5%` | Baseline Histogram Boosting |
+| **Random Forest (Balanced)** | `66.76%` | `0.6666` | `87.5%` | `69.0%` | `50.8%` | Non-Linear Bagging Baseline |
 
 ---
 
