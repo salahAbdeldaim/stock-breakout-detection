@@ -19,3 +19,4 @@ Thumbs.db
 # Logs and temporary files
 *.log
 scratch/
+catboost_info/
