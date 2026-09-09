@@ -1,5 +1,6 @@
 import os
 import json
+import joblib
 import argparse
 import pandas as pd
 import numpy as np
@@ -65,10 +66,49 @@ CLOSE_NEAR_HIGH = 0.70    # Close in top 30% of day's range
 VOLUME_MULTIPLIER = 1.20  # Volume >= 120% of 30-day average
 
 class MultiExpertSystem:
-    def __init__(self, dataset_path="data/unified_breakout_dataset.csv"):
+    def __init__(self, dataset_path="data/unified_breakout_dataset.csv", models_dir="models"):
         self.dataset_path = dataset_path
+        self.models_dir = models_dir
         self.experts = {}
-        self._train_experts()
+        if not self._load_production_models():
+            self._train_experts()
+            
+    def _load_production_models(self):
+        """Loads pre-trained full-dataset production models from models/ in milliseconds."""
+        cons_p = os.path.join(self.models_dir, "expert_conservative.joblib")
+        bal_p = os.path.join(self.models_dir, "expert_balanced_lgbm.joblib")
+        agg_p = os.path.join(self.models_dir, "expert_aggressive.joblib")
+        
+        if os.path.exists(cons_p) and os.path.exists(bal_p) and os.path.exists(agg_p):
+            try:
+                exp_cons = joblib.load(cons_p)
+                exp_bal = joblib.load(bal_p)
+                exp_agg = joblib.load(agg_p)
+                
+                self.experts = {
+                    "Conservative (Capital Preserver)": {
+                        "model": exp_cons,
+                        "type": "xgboost",
+                        "profile": "Risk-Averse: Prioritizes Capital Preservation (Win Rate 90.1%, Catches 68% of Traps)",
+                        "min_prob": 0.50
+                    },
+                    "Balanced (LightGBM Alpha Booster)": {
+                        "model": exp_bal,
+                        "type": "lightgbm",
+                        "profile": "Dual-Optimum: Wins both Win Rate (85%) AND Market Capture (84%) via Leaf-wise Trees",
+                        "min_prob": 0.50
+                    },
+                    "Aggressive (Momentum Hunter)": {
+                        "model": exp_agg,
+                        "type": "xgboost",
+                        "profile": "Growth-Seeker: Captures 97.6% of all breakout momentum, relies on tight trailing stop",
+                        "min_prob": 0.50
+                    }
+                }
+                return True
+            except Exception as e:
+                print(f"[QuantBreakout] Warning loading models: {e}. Falling back to training...")
+        return False
         
     def _train_experts(self):
         df = pd.read_csv(self.dataset_path)

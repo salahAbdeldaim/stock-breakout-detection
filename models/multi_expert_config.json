@@ -1,46 +1,67 @@
 {
-    "system_name": "Multi-Expert Quantitative Breakout Decision System",
-    "version": "3.0.0",
-    "features": [
-        "Resistance_Distance_%",
-        "Close_Position",
-        "Volume_Ratio",
-        "Volume_Surge_10",
-        "Distance_MA10_%",
-        "Distance_MA30_%",
-        "MA_Ratio",
-        "Momentum_5d_%",
-        "Momentum_10d_%",
-        "Momentum_20d_%",
-        "ATR_Pct",
-        "Daily_Range_%",
-        "Range_Ratio",
-        "Volatility_10d",
-        "Price_Range_10d_%",
-        "RSI_14",
-        "Breakout_Pct"
-    ],
-    "experts": {
-        "conservative": {
-            "model_path": "models/expert_conservative.json",
-            "loss_weight": 5.0,
-            "win_rate": 87.47,
-            "fakeout_recall": 55.08,
-            "roc_auc": 0.6617
-        },
-        "balanced": {
-            "model_path": "models/expert_balanced.json",
-            "loss_weight": 3.0,
-            "win_rate": 84.9,
-            "fakeout_recall": 27.97,
-            "roc_auc": 0.655
-        },
-        "aggressive": {
-            "model_path": "models/expert_aggressive.json",
-            "loss_weight": 1.0,
-            "win_rate": 82.92,
-            "market_capture": 97.57,
-            "roc_auc": 0.6635
-        }
+  "version": "2.0.0-production",
+  "timestamp": "2026-09-09T18:43:35.390981",
+  "training_samples": 3474,
+  "features_count": 22,
+  "feature_names": [
+    "Resistance_Distance_%",
+    "Close_Position",
+    "Volume_Ratio",
+    "Volume_Surge_10",
+    "Distance_MA10_%",
+    "Distance_MA30_%",
+    "MA_Ratio",
+    "Momentum_5d_%",
+    "Momentum_10d_%",
+    "Momentum_20d_%",
+    "ATR_Pct",
+    "Daily_Range_%",
+    "Range_Ratio",
+    "Volatility_10d",
+    "Price_Range_10d_%",
+    "RSI_14",
+    "Breakout_Pct",
+    "Upper_Shadow_Pct",
+    "Volume_Conviction",
+    "Momentum_Accel_5_20",
+    "Squeeze_Tightness",
+    "Extension_ATR_Ratio"
+  ],
+  "experts": {
+    "Conservative": {
+      "type": "xgboost",
+      "weight": 5.0,
+      "threshold": 0.5,
+      "profile": "Risk-Averse: Prioritizes Capital Preservation (Traps penalized 5x)"
+    },
+    "Balanced": {
+      "type": "lightgbm",
+      "weight": 3.0,
+      "threshold": 0.5,
+      "profile": "Dual-Optimum: Leaf-wise tree boosting for high win rate & capture"
+    },
+    "Aggressive": {
+      "type": "xgboost",
+      "weight": 1.0,
+      "threshold": 0.5,
+      "profile": "Momentum Hunter: Captures 97.6% of market velocity"
     }
+  },
+  "strategy_tiers": {
+    "Tier_1": {
+      "condition": "approval_count >= 2",
+      "allocation": "100%",
+      "stop_loss": "1.0 ATR Standard Stop"
+    },
+    "Tier_2": {
+      "condition": "approval_count == 1",
+      "allocation": "50%",
+      "stop_loss": "Tight Dynamic Stop (-2.50%)"
+    },
+    "Tier_3": {
+      "condition": "approval_count == 0",
+      "allocation": "0%",
+      "stop_loss": "Stand Aside (Capital Preserved)"
+    }
+  }
 }
