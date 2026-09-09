@@ -97,6 +97,22 @@ Top ranking predictive drivers extracted from **XGBoost Gain**:
 3. **`Price_Range_10d_%` (8.55%)**: Volatility squeeze tightness over the preceding 10 trading sessions.
 4. **`Distance_MA30_%` (6.17%)**: Trend extension relative to the 30-day baseline.
 5. **`Volume_Surge_10` & `Volume_Ratio` (~5.9%)**: Institutional volume commitment confirming absorption of supply.
+---
+
+## 🏛️ Multi-Expert Decision Committee & Explainable AI (XAI)
+
+To prevent the model from acting as a black box, the system incorporates a **Panel of 3 Quantitative Experts** combined with **Native TreeSHAP Explainability (`stock_analyzer.py`)**:
+
+| Expert Persona | Weight / Objective | Out-of-Sample Accuracy | Win Rate (Precision) | Market Capture (Recall) | Traps Avoided (Fakeout Rec) | Target Investor Profile |
+| :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **Conservative (Capital Preserver)** | $w=5.0$ (High penalty) | `61.29%` | **`90.10%`** | `59.97%` | **`67.80%`** | Risk-averse; capital preservation first |
+| **Balanced (Swing Trader)** | $w=3.0$ (Balanced) | `73.53%` | **`84.90%`** | `82.84%` | **`27.97%`** | Standard swing trader; sweet spot |
+| **Aggressive (Momentum Hunter)** | $w=1.0$ (Standard) | `81.29%` | `82.92%` | **`97.57%`** | `1.69%` | Growth-seeker; tight stop-loss exits |
+
+### 🔍 Two-Stage Decision Workflow & Explainability
+1. **Stage 1 (State Screener)**: Evaluates whether the asset breached its 30-day resistance with clearance, closing strength, and volume. If not, it declares **`STABLE CONSOLIDATION`** and reports exact distance to resistance.
+2. **Stage 2 (Panel & XAI)**: When a breakout candidate is detected, all 3 experts evaluate the setup and TreeSHAP decomposes the exact **Factors Causing Doubt** (negative impact) vs. **Factors Supporting Breakout** (positive impact).
+3. **Stage 3 (Consensus & Risk Guidance)**: Issues a committee verdict (Unanimous, Majority, Split, or Rejection) and calculates a volatility-based stop-loss ($1 \times \text{ATR}$).
 
 ---
 
@@ -107,9 +123,10 @@ Top ranking predictive drivers extracted from **XGBoost Gain**:
 │   └── unified_breakout_dataset.csv  # 3,474 events x 31 columns (50 Equities, Zero nulls)
 ├── stock_data/                       # 50 Daily OHLCV CSVs (AAPL, MSFT, NVDA, JPM, etc.)
 ├── models/                           # Exported Champion XGBoost model artifacts
+├── stock_analyzer.py                 # Interactive Two-Stage Screener & Multi-Expert XAI CLI
 ├── project.ipynb                     # Multi-asset data pipeline, screening math, MAE/MDD & labeling
 ├── model.ipynb                       # Comprehensive reference (5 models, weight sweeps, thresholding)
-├── final_model.ipynb                 # Production pipeline: Tuned Champion XGBoost + Full Evaluation Matrix
+├── final_model.ipynb                 # Production pipeline: Champion XGBoost, XAI & Decision Demos
 ├── .gitignore                        # Python & Jupyter ignore rules
 └── README.md                         # Quantitative research documentation
 ```
@@ -129,7 +146,19 @@ cd stock-breakout-detection
 pip install yfinance pandas numpy scikit-learn matplotlib seaborn xgboost
 ```
 
-### 3. Run Notebooks
+### 3. Run Interactive Stock Screener & Decision Analyzer
+```bash
+# Test latest trading session for an equity (e.g. AAPL)
+python stock_analyzer.py --ticker AAPL
+
+# Test a historical breakout setup (e.g. TSLA)
+python stock_analyzer.py --ticker TSLA --date 2021-10-21
+
+# Test a historical bull trap / fakeout setup (e.g. NVDA)
+python stock_analyzer.py --ticker NVDA --date 2026-05-14
+```
+
+### 4. Run Notebooks
 - Launch `project.ipynb` to inspect the 50-stock data pipeline, screening math, MAE, Peak-to-Trough MDD, and dataset generation.
 - Launch `model.ipynb` for the full exploratory benchmark (5 models, penalty sweeps, ROC curves, probability thresholds).
-- Launch `final_model.ipynb` for the standalone tuned Champion XGBoost pipeline with the complete evaluation matrix (TP, TN, FP, FN, Win Rate, and Trap Conviction).
+- Launch `final_model.ipynb` for the production pipeline with the full evaluation matrix, TreeSHAP explainability, and multi-expert case studies.
