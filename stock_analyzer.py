@@ -212,7 +212,8 @@ class MultiExpertSystem:
             feat_contribs = pd.Series(contribs[:-1], index=FEATURE_COLS)
         else:
             # LightGBM native TreeSHAP
-            contribs = model.predict_proba(feat_vals, pred_contrib=True)[0]
+            feat_df = pd.DataFrame([feature_series[FEATURE_COLS]])
+            contribs = model.predict_proba(feat_df, pred_contrib=True)[0]
             base_bias = contribs[-1]
             feat_contribs = pd.Series(contribs[:-1], index=FEATURE_COLS)
             
@@ -293,8 +294,8 @@ class MultiExpertSystem:
         
         for exp_name, exp_info in self.experts.items():
             model = exp_info["model"]
-            feat_vals = candle[FEATURE_COLS].values.reshape(1, -1)
-            prob_breakout = model.predict_proba(feat_vals)[0, 1]
+            feat_df = pd.DataFrame([candle[FEATURE_COLS]])
+            prob_breakout = model.predict_proba(feat_df)[0, 1]
             prob_fakeout = 1.0 - prob_breakout
             is_approved = bool(prob_breakout >= exp_info["min_prob"])
             if is_approved:
