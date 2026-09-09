@@ -1,6 +1,6 @@
 {
-    "system_name": "Multi-Expert Quantitative Breakout Decision System (Win Both Edition)",
-    "version": "4.0.0",
+    "system_name": "Multi-Expert Quantitative Breakout Decision System",
+    "version": "3.0.0",
     "features": [
         "Resistance_Distance_%",
         "Close_Position",
@@ -18,37 +18,29 @@
         "Volatility_10d",
         "Price_Range_10d_%",
         "RSI_14",
-        "Breakout_Pct",
-        "Upper_Shadow_Pct",
-        "Volume_Conviction",
-        "Momentum_Accel_5_20",
-        "Squeeze_Tightness",
-        "Extension_ATR_Ratio"
+        "Breakout_Pct"
     ],
     "experts": {
         "conservative": {
             "model_path": "models/expert_conservative.json",
-            "model_type": "xgboost",
             "loss_weight": 5.0,
-            "win_rate": 88.66,
-            "fakeout_recall": 58.47,
-            "roc_auc": 0.6721
+            "win_rate": 87.47,
+            "fakeout_recall": 55.08,
+            "roc_auc": 0.6617
         },
         "balanced": {
-            "model_path": "models/expert_balanced_lgbm.txt",
-            "model_type": "lightgbm",
+            "model_path": "models/expert_balanced.json",
             "loss_weight": 3.0,
-            "win_rate": 84.97,
-            "market_capture": 84.23,
-            "roc_auc": 0.6671
+            "win_rate": 84.9,
+            "fakeout_recall": 27.97,
+            "roc_auc": 0.655
         },
         "aggressive": {
             "model_path": "models/expert_aggressive.json",
-            "model_type": "xgboost",
             "loss_weight": 1.0,
-            "win_rate": 83.28,
-            "market_capture": 98.44,
-            "roc_auc": 0.6557
+            "win_rate": 82.92,
+            "market_capture": 97.57,
+            "roc_auc": 0.6635
         }
     }
 }
