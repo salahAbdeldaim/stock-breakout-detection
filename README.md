@@ -45,10 +45,10 @@ flowchart TD
 
 The dataset comprises **3,474 validated breakout events** across **50 liquid US large-cap equities** spanning over 24 years (2000–2026):
 
-| Target Class | Event Count | Proportion | 5-Day Avg Return | 30-Day Avg Return | 30-Day Max Gain | 30-Day Max Drawdown | 30-Day ATR Continuation Rate |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **`breakout` (1)** | **2,861** | **82.4%** | **`+1.68%`** | **`+3.69%`** | **`+9.64%`** | `-4.56%` | **`52.3%`** |
-| **`fakeout` (0)** | **613** | **17.6%** | **`-5.28%`** | **`-4.94%`** | `+2.88%` | **`-12.13%`** | **`21.5%`** |
+| Target Class | Event Count | Proportion | 5-Day Avg Return | 30-Day Avg Return | 30-Day Max Gain (MFE) | 30-Day MAE (Adverse Excursion) | 30-Day True Max DD | 30-Day ATR Continuation Rate |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **`breakout` (1)** | **2,861** | **82.4%** | **`+1.68%`** | **`+3.69%`** | **`+10.93%`** | **`-5.90%`** | **`-10.99%`** | **`52.3%`** |
+| **`fakeout` (0)** | **613** | **17.6%** | **`-5.28%`** | **`-4.94%`** | `+4.45%` | **`-13.38%`** | **`-14.76%`** | **`21.5%`** |
 
 > **Universe Diversification (50 Equities)**:
 > - **Technology & Semis (15)**: `AAPL`, `MSFT`, `NVDA`, `GOOGL`, `AMZN`, `META`, `TSLA`, `AMD`, `INTC`, `QCOM`, `AVGO`, `CSCO`, `ORCL`, `CRM`, `ADBE`
@@ -104,10 +104,12 @@ Top ranking predictive drivers extracted from **XGBoost Gain**:
 
 ```plaintext
 ├── data/
-│   └── unified_breakout_dataset.csv  # 3,474 events x 30 columns (50 Equities, Zero nulls)
+│   └── unified_breakout_dataset.csv  # 3,474 events x 31 columns (50 Equities, Zero nulls)
 ├── stock_data/                       # 50 Daily OHLCV CSVs (AAPL, MSFT, NVDA, JPM, etc.)
-├── project.ipynb                     # Multi-asset data pipeline, screening math & labeling
-├── model.ipynb                       # XGBoost modeling, ROC-AUC, thresholding & live inference
+├── models/                           # Exported Champion XGBoost model artifacts
+├── project.ipynb                     # Multi-asset data pipeline, screening math, MAE/MDD & labeling
+├── model.ipynb                       # Comprehensive reference (5 models, weight sweeps, thresholding)
+├── final_model.ipynb                 # Production pipeline: Tuned Champion XGBoost + Full Evaluation Matrix
 ├── .gitignore                        # Python & Jupyter ignore rules
 └── README.md                         # Quantitative research documentation
 ```
@@ -128,5 +130,6 @@ pip install yfinance pandas numpy scikit-learn matplotlib seaborn xgboost
 ```
 
 ### 3. Run Notebooks
-- Launch `project.ipynb` to inspect the 50-stock data pipeline and dataset generation.
-- Launch `model.ipynb` to explore features, train XGBoost, evaluate ROC-AUC curves, and test live inference simulation.
+- Launch `project.ipynb` to inspect the 50-stock data pipeline, screening math, MAE, Peak-to-Trough MDD, and dataset generation.
+- Launch `model.ipynb` for the full exploratory benchmark (5 models, penalty sweeps, ROC curves, probability thresholds).
+- Launch `final_model.ipynb` for the standalone tuned Champion XGBoost pipeline with the complete evaluation matrix (TP, TN, FP, FN, Win Rate, and Trap Conviction).
