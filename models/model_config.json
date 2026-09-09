@@ -1,0 +1,38 @@
+{
+    "model_name": "xgboost_breakout_champion",
+    "version": "2.0.0",
+    "features": [
+        "Resistance_Distance_%",
+        "Close_Position",
+        "Volume_Ratio",
+        "Volume_Surge_10",
+        "Distance_MA10_%",
+        "Distance_MA30_%",
+        "MA_Ratio",
+        "Momentum_5d_%",
+        "Momentum_10d_%",
+        "Momentum_20d_%",
+        "ATR_Pct",
+        "Daily_Range_%",
+        "Range_Ratio",
+        "Volatility_10d",
+        "Price_Range_10d_%",
+        "RSI_14",
+        "Breakout_Pct"
+    ],
+    "target_mapping": {
+        "fakeout": 0,
+        "breakout": 1
+    },
+    "optimal_threshold": 0.75,
+    "recommended_profiles": {
+        "conservative": {
+            "threshold": 0.7,
+            "fakeout_weight": 3.0
+        },
+        "aggressive": {
+            "threshold": 0.75,
+            "fakeout_weight": 1.0
+        }
+    }
+}
