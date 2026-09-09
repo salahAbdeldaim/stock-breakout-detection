@@ -20,19 +20,9 @@
         "RSI_14",
         "Breakout_Pct"
     ],
+    "optimal_threshold": 0.7,
     "target_mapping": {
         "fakeout": 0,
         "breakout": 1
-    },
-    "optimal_threshold": 0.75,
-    "recommended_profiles": {
-        "conservative": {
-            "threshold": 0.7,
-            "fakeout_weight": 3.0
-        },
-        "aggressive": {
-            "threshold": 0.75,
-            "fakeout_weight": 1.0
-        }
     }
 }
