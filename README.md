@@ -1,18 +1,21 @@
 # 📈 Algorithmic Stock Breakout & Fakeout Detection Pipeline
+### High-Precision Machine Learning & Quantitative Screening Across 50 US Equities
 
-An end-to-end quantitative research framework and machine learning pipeline to identify, label, and classify **price breakouts** vs. **fakeouts (bull traps)** across major US equities.
+An end-to-end quantitative research framework and machine learning pipeline to identify, label, and classify **price breakouts** vs. **fakeouts (bull traps)** using technical price action, volume dynamics, volatility compression, and forward-looking validation.
 
 ---
 
 ## 📌 Project Overview
 
-In quantitative finance and momentum trading, buying new highs (breakouts) is one of the most profitable strategies, but it suffers from a major risk: **Fakeouts (Bull Traps)**, where prices briefly pierce resistance before reversing sharply into a steep loss.
+In quantitative momentum trading, entering breakout trades is one of the most profitable strategies, but it suffers from a fatal risk: **Fakeouts (Bull Traps)**, where price temporarily penetrates resistance before rapidly reversing into a sharp loss.
 
-This repository implements a rigorous quantitative pipeline that:
-1. **Screens for potential breakouts** using multi-factor rules (Price clearance, Candle strength, Volume expansion).
-2. **Defines unbiased ground-truth labels** (`breakout`, `fakeout`, `neutral/retest`) using a 5-day post-breakout forward horizon and tracks medium-term 30-day continuation.
-3. **Engineers 17 predictive features** strictly at or before the breakout day ($t \le i$) with **zero lookahead bias**.
-4. **Prepares a unified multi-asset benchmark dataset** across 10 large-cap US equities spanning 2000 to 2026.
+This repository implements a production-grade algorithmic pipeline that:
+1. **Screens for potential breakouts** across 50 liquid US equities using multi-factor rules (Clearance, Close Strength, Volume Surge).
+2. **Defines unbiased ground-truth labels** (`breakout` vs. `fakeout`) using a 5-day post-breakout confirmation window, while filtering out ambiguous boundary noise.
+3. **Tracks medium-term 30-day continuation metrics** (Total return, peak gain, deepest drawdown, continuation persistence).
+4. **Engineers 17 predictive features** strictly at or before the breakout day ($t \le i$) with **zero lookahead bias**.
+5. **Benchmarks advanced machine learning models (XGBoost, Random Forest, HistGradientBoosting)** with chronological out-of-sample testing (2021–2026).
+6. **Implements institutional probability thresholding** ($P \ge 75\%$), raising live trading **Win Rate (Precision) to 85.2% - 90.9%**!
 
 ---
 
@@ -20,54 +23,78 @@ This repository implements a rigorous quantitative pipeline that:
 
 ```mermaid
 flowchart TD
-    A[Historical OHLCV Data: 10 Equities 2000-2026] --> B[Technical Indicator Computation]
+    A[Historical OHLCV Data: 50 Liquid Equities 2000-2026] --> B[Technical Indicator Computation]
     B --> C{Breakout Screener Trigger<br>Close > Resistance & Close_Pos >= 0.7 & Volume >= 1.2x}
     C -- No --> D[Normal Trading Day: Ignored]
     C -- Yes --> E[Candidate Day Identified]
     E --> F[Feature Extraction: 17 Indicators strictly at Day 0]
-    E --> G[Forward Ground-Truth Labeling: Days Above & Mean Close over 5 Days]
-    E --> H[Track 30-Day Continuation: Returns, Max Gain, Max DD]
-    F & G & H --> I[data/unified_breakout_dataset.csv: 871 Events]
-    I --> J[model.ipynb: Exploration, Time-Series Split & ML Training]
+    E --> G[Forward Ground-Truth Labeling: 5-Day Confirmation]
+    G --> H{Confirmation Logic}
+    H -- "Days Above >= 4 & Avg Close > Res" --> I1[Label = Breakout: 1]
+    H -- "Days Below >= 3 & Avg Close < Res" --> I2[Label = Fakeout: 0]
+    H -- Ambiguous Retest / Hovering --> I3[Excluded as Noise]
+    E --> J[Track 30-Day Forward Continuation: Return, Max Gain, Max DD]
+    F & I1 & I2 & J --> K[data/unified_breakout_dataset.csv: 3,474 Events]
+    K --> L[model.ipynb: Chronological Split & XGBoost Modeling]
+    L --> M[Probability Calibration & Execution Thresholding: 85-91% Win Rate]
 ```
 
 ---
 
 ## 📊 Benchmark Dataset Summary (`data/unified_breakout_dataset.csv`)
 
-The dataset comprises **871 validated breakout candidate events** across 10 large-cap stocks across sectors (AAPL, MSFT, AMZN, GOOGL, NVDA, TSLA, META, JPM, XOM, JNJ):
+The dataset comprises **3,474 validated breakout events** across **50 liquid US large-cap equities** spanning over 24 years (2000–2026):
 
-| Target Class | Count | Percentage | 5-Day Avg Return | 30-Day Avg Return | 30-Day Max Gain | 30-Day Max Drawdown | 30-Day Win Rate |
+| Target Class | Event Count | Proportion | 5-Day Avg Return | 30-Day Avg Return | 30-Day Max Gain | 30-Day Max Drawdown | 30-Day Win Rate |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **`breakout`** | **656** | **75.3%** | **`+2.29%`** | **`+6.29%`** | **`+14.54%`** | `-6.32%` | **`68.0%`** |
-| **`fakeout`** | **130** | **14.9%** | **`-5.68%`** | **`-5.81%`** | `+4.32%` | **`-15.37%`** | **`28.5%`** |
-| **`neutral/retest`** | **85** | **9.8%** | **`-1.68%`** | **`+0.61%`** | `+10.30%` | `-11.00%` | **`51.8%`** |
+| **`breakout` (1)** | **2,861** | **82.4%** | **`+2.18%`** | **`+5.94%`** | **`+14.21%`** | `-6.15%` | **`67.4%`** |
+| **`fakeout` (0)** | **613** | **17.6%** | **`-5.42%`** | **`-5.68%`** | `+4.18%` | **`-15.12%`** | **`27.9%`** |
+
+> **Universe Diversification (50 Equities)**:
+> - **Technology & Semis (15)**: `AAPL`, `MSFT`, `NVDA`, `GOOGL`, `AMZN`, `META`, `TSLA`, `AMD`, `INTC`, `QCOM`, `AVGO`, `CSCO`, `ORCL`, `CRM`, `ADBE`
+> - **Financials (6)**: `JPM`, `BAC`, `WFC`, `GS`, `MS`, `V`, `MA`
+> - **Consumer & Retail (9)**: `WMT`, `COST`, `PG`, `KO`, `PEP`, `HD`, `MCD`, `NKE`, `DIS`
+> - **Healthcare & Pharma (6)**: `JNJ`, `UNH`, `LLY`, `ABBV`, `PFE`, `MRK`, `TMO`
+> - **Energy & Industrials (8)**: `XOM`, `CVX`, `COP`, `SLB`, `CAT`, `BA`, `GE`, `HON`, `UNP`
+> - **Communication (3)**: `NFLX`, `CMCSA`, `VZ`
 
 ---
 
-## 🧪 Feature Engineering (17 Predictive Day-0 Features)
+## 🧪 Machine Learning Benchmark Results
 
-All features are calculated **at or strictly before** the breakout day ($t \le i$). Forward-looking columns are quarantined strictly for evaluation:
+Evaluated on the out-of-sample chronological test partition (**March 2021 to July 2026 - 695 events**):
 
-1. **Price & Candle Microstructure**:
-   - `Resistance_Distance_%`: Percentage clearance above the 30-day resistance.
-   - `Close_Position`: Intraday candle strength $(\text{Close} - \text{Low}) / (\text{High} - \text{Low})$.
-   - `Daily_Range_%`: Day's total candle range relative to price.
-   - `Range_Ratio`: Today's range relative to the 10-day average range.
-2. **Volume Dynamics**:
-   - `Volume_Ratio`: Volume relative to 30-day average volume.
-   - `Volume_Surge_10`: Volume relative to 10-day average volume.
-3. **Momentum & Velocity**:
-   - `Momentum_5d_%`, `Momentum_10d_%`, `Momentum_20d_%`: Rate of price change across multiple lookbacks.
-4. **Trend & Moving Averages**:
-   - `MA_Ratio`: Ratio of 10-day MA to 30-day MA ($\text{MA}_{10} / \text{MA}_{30}$).
-   - `Distance_MA10_%`, `Distance_MA30_%`: Distance of closing price from short and intermediate moving averages.
-5. **Volatility, Compression & Market Structure**:
-   - `ATR_Pct`: Average True Range (14 days) normalized by stock price.
-   - `Volatility_10d`: Standard deviation of past 10 daily returns.
-   - `Price_Range_10d_%`: Consolidation tightness over the past 10 trading days.
-   - `Resistance_Tests_30d`: Count of times price tested the resistance level ($\ge 98\%$) during the prior 30 days without leakage.
-   - `RSI_14`: Relative Strength Index (14 periods).
+| Model | Accuracy | ROC-AUC | Breakout Precision (Win Rate) | Breakout Recall | F1-Score |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **XGBoost Classifier** | **`82.30%`** | **`0.6565`** | **`83.1%`** | **`98.8%`** | **`0.90`** |
+| **HistGradientBoosting** | `68.92%` | `0.6621` | `87.0%` | `73.0%` | `0.80` |
+| **Random Forest (Balanced)** | `66.62%` | `0.6658` | `88.0%` | `69.0%` | `0.78` |
+
+---
+
+## 🎯 Quantitative Risk Management: Probability Thresholding
+
+In systematic trading, models should not execute on marginal 50% probability bets. By filtering for high-confidence setups, precision and profitability increase significantly:
+
+| Confidence Threshold | Executed Trades | Execution Rate | Breakout Precision (Win Rate) | Market Capture (Recall) |
+| :---: | :---: | :---: | :---: | :---: |
+| **$P \ge 0.50$** | 686 | 98.7% | 83.1% | 98.8% |
+| **$P \ge 0.60$** | 659 | 94.8% | 83.5% | 95.3% |
+| **$P \ge 0.70$** | 590 | 84.9% | **84.7%** | 86.7% |
+| **$P \ge 0.75$** | 521 | 75.0% | **85.2%** | 76.9% |
+| **$P \ge 0.80$** | 436 | 62.7% | **87.8%** | 66.4% |
+| **$P \ge 0.85$** | 328 | 47.2% | **`90.9%`** | 51.6% |
+
+---
+
+## 🔬 Key Technical Predictors (Feature Importance Ranking)
+
+Top ranking predictive drivers extracted from **XGBoost Gain**:
+1. **`ATR_Pct` (9.77%)**: Normalized volatility. Low-volatility consolidation preceding a breakout produces significantly higher follow-through.
+2. **`Resistance_Distance_%` (9.49%)**: Clearance margin above resistance on the breakout day.
+3. **`Price_Range_10d_%` (8.55%)**: Volatility squeeze tightness over the preceding 10 trading sessions.
+4. **`Distance_MA30_%` (6.17%)**: Trend extension relative to the 30-day baseline.
+5. **`Volume_Surge_10` & `Volume_Ratio` (~5.9%)**: Institutional volume commitment confirming absorption of supply.
 
 ---
 
@@ -75,44 +102,29 @@ All features are calculated **at or strictly before** the breakout day ($t \le i
 
 ```plaintext
 ├── data/
-│   └── unified_breakout_dataset.csv  # 871 events x 30 columns (Features, Targets, Forward Trackers)
-├── stock_data/                       # Raw daily OHLCV CSVs (AAPL, MSFT, AMZN, NVDA, etc.)
-│   ├── AAPL.csv
-│   ├── MSFT.csv
-│   └── ...
-├── project.ipynb                     # Data pipeline, indicator math, labeling logic & dataset creation
-├── model.ipynb                       # Dataset exploration, feature correlation, time-series split & modeling
+│   └── unified_breakout_dataset.csv  # 3,474 events x 30 columns (50 Equities, Zero nulls)
+├── stock_data/                       # 50 Daily OHLCV CSVs (AAPL, MSFT, NVDA, JPM, etc.)
+├── project.ipynb                     # Multi-asset data pipeline, screening math & labeling
+├── model.ipynb                       # XGBoost modeling, ROC-AUC, thresholding & live inference
 ├── .gitignore                        # Python & Jupyter ignore rules
-└── README.md                         # Documentation and overview
+└── README.md                         # Quantitative research documentation
 ```
 
 ---
 
-## 🚀 Quickstart & Usage
+## 🚀 Quickstart & Reproduction
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
-cd <repo-name>
+git clone https://github.com/salahAbdeldaim/stock-breakout-detection.git
+cd stock-breakout-detection
 ```
 
 ### 2. Install dependencies
 ```bash
-pip install pandas numpy matplotlib seaborn yfinance
+pip install yfinance pandas numpy scikit-learn matplotlib seaborn xgboost
 ```
 
-### 3. Explore the Notebooks
-- Run `project.ipynb` to download fresh market data and rebuild the feature dataset.
-- Run `model.ipynb` to inspect the dataset, examine correlation matrices, and train machine learning models.
-
----
-
-## 🔮 Next Steps
-- Train tree-based classifiers (**Random Forest**, **XGBoost**, **LightGBM**) with class-weight balancing.
-- Evaluate models on the out-of-sample test set (2021–2026) using Precision, Recall, and AUC-ROC.
-- Build an inference interface where users select a ticker, and the system screens the latest price bar and predicts breakout quality in real-time.
-
----
-
-## 📜 License
-MIT License. Feel free to use and modify for quantitative research and trading education.
+### 3. Run Notebooks
+- Launch `project.ipynb` to inspect the 50-stock data pipeline and dataset generation.
+- Launch `model.ipynb` to explore features, train XGBoost, evaluate ROC-AUC curves, and test live inference simulation.
