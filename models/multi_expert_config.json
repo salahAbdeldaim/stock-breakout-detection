@@ -1,8 +1,8 @@
 {
-  "version": "2.0.0-production",
-  "timestamp": "2026-09-09T18:43:35.390981",
+  "version": "2.1.0-production",
+  "timestamp": "2026-09-09T20:50:01.106967",
   "training_samples": 3474,
-  "features_count": 22,
+  "features_count": 21,
   "feature_names": [
     "Resistance_Distance_%",
     "Close_Position",
@@ -20,48 +20,28 @@
     "Volatility_10d",
     "Price_Range_10d_%",
     "RSI_14",
-    "Breakout_Pct",
     "Upper_Shadow_Pct",
     "Volume_Conviction",
     "Momentum_Accel_5_20",
     "Squeeze_Tightness",
     "Extension_ATR_Ratio"
   ],
+  "change_log": "v2.1.0: Removed redundant Breakout_Pct (was alias of Resistance_Distance_%)",
   "experts": {
     "Conservative": {
       "type": "xgboost",
       "weight": 5.0,
-      "threshold": 0.5,
-      "profile": "Risk-Averse: Prioritizes Capital Preservation (Traps penalized 5x)"
+      "threshold": 0.5
     },
     "Balanced": {
       "type": "lightgbm",
       "weight": 3.0,
-      "threshold": 0.5,
-      "profile": "Dual-Optimum: Leaf-wise tree boosting for high win rate & capture"
+      "threshold": 0.5
     },
     "Aggressive": {
       "type": "xgboost",
       "weight": 1.0,
-      "threshold": 0.5,
-      "profile": "Momentum Hunter: Captures 97.6% of market velocity"
-    }
-  },
-  "strategy_tiers": {
-    "Tier_1": {
-      "condition": "approval_count >= 2",
-      "allocation": "100%",
-      "stop_loss": "1.0 ATR Standard Stop"
-    },
-    "Tier_2": {
-      "condition": "approval_count == 1",
-      "allocation": "50%",
-      "stop_loss": "Tight Dynamic Stop (-2.50%)"
-    },
-    "Tier_3": {
-      "condition": "approval_count == 0",
-      "allocation": "0%",
-      "stop_loss": "Stand Aside (Capital Preserved)"
+      "threshold": 0.5
     }
   }
 }

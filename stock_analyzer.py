@@ -7,7 +7,8 @@ import numpy as np
 import xgboost as xgb
 import lightgbm as lgb
 
-# 22 Predictive Features (17 Baseline + 5 Alpha Interaction Features)
+# 21 Predictive Features (16 Baseline + 5 Alpha Interaction Features)
+# Note: Breakout_Pct was removed — it was an exact alias for Resistance_Distance_%
 FEATURE_COLS = [
     "Resistance_Distance_%",
     "Close_Position",
@@ -25,7 +26,6 @@ FEATURE_COLS = [
     "Volatility_10d",
     "Price_Range_10d_%",
     "RSI_14",
-    "Breakout_Pct",
     # 5 Alpha Interaction Features (The "Win Both" Edge)
     "Upper_Shadow_Pct",
     "Volume_Conviction",
@@ -51,8 +51,7 @@ FEATURE_DESCRIPTIONS = {
     "Volatility_10d": "10-day historical standard deviation",
     "Price_Range_10d_%": "Pre-breakout consolidation tightness (Squeeze)",
     "RSI_14": "14-day Relative Strength Index (Momentum/Overbought)",
-    "Breakout_Pct": "Clearance margin above resistance",
-    # Alpha Interactions
+    # 5 Alpha Interaction Features
     "Upper_Shadow_Pct": "Intraday rejection shadow (% drop from high to close)",
     "Volume_Conviction": "Conviction volume (Volume Surge x Closing Position)",
     "Momentum_Accel_5_20": "Short-term momentum acceleration vs 20d velocity",
@@ -226,7 +225,6 @@ class MultiExpertSystem:
         # Resistance & Screening
         df["Resistance"] = df["High"].shift(1).rolling(LOOKBACK).max()
         df["Resistance_Distance_%"] = ((df["Close"] - df["Resistance"]) / (df["Resistance"] + 1e-9)) * 100
-        df["Breakout_Pct"] = df["Resistance_Distance_%"]
         df["Close_Position"] = np.where(high_low > 0, (df["Close"] - df["Low"]) / high_low, 0)
         
         # 5 Alpha Interaction Features
