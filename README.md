@@ -19,6 +19,37 @@ This repository implements a production-grade algorithmic pipeline that:
 
 ---
 
+## 🚀 Quickstart & Live Web Terminal
+
+Run the full algorithmic trading stack (**FastAPI Backend + React Vite Terminal**) locally in 2 minutes:
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/salahAbdeldaim/stock-breakout-detection.git
+cd stock-breakout-detection
+```
+
+### 2. Install Python Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Launch the FastAPI Backend
+```bash
+python server.py
+# API server runs on http://127.0.0.1:8000
+```
+
+### 4. Launch the React + Vite Terminal (In a second terminal window)
+```bash
+cd frontend
+npm install
+npm run dev
+# Open http://localhost:5173 in your browser
+```
+
+---
+
 ## 🏗️ Architecture & Workflow
 
 ```mermaid
