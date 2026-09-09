@@ -45,10 +45,10 @@ flowchart TD
 
 The dataset comprises **3,474 validated breakout events** across **50 liquid US large-cap equities** spanning over 24 years (2000–2026):
 
-| Target Class | Event Count | Proportion | 5-Day Avg Return | 30-Day Avg Return | 30-Day Max Gain | 30-Day Max Drawdown | 30-Day Win Rate |
+| Target Class | Event Count | Proportion | 5-Day Avg Return | 30-Day Avg Return | 30-Day Max Gain | 30-Day Max Drawdown | 30-Day ATR Continuation Rate |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **`breakout` (1)** | **2,861** | **82.4%** | **`+2.18%`** | **`+5.94%`** | **`+14.21%`** | `-6.15%` | **`67.4%`** |
-| **`fakeout` (0)** | **613** | **17.6%** | **`-5.42%`** | **`-5.68%`** | `+4.18%` | **`-15.12%`** | **`27.9%`** |
+| **`breakout` (1)** | **2,861** | **82.4%** | **`+1.68%`** | **`+3.69%`** | **`+9.64%`** | `-4.56%` | **`52.3%`** |
+| **`fakeout` (0)** | **613** | **17.6%** | **`-5.28%`** | **`-4.94%`** | `+2.88%` | **`-12.13%`** | **`21.5%`** |
 
 > **Universe Diversification (50 Equities)**:
 > - **Technology & Semis (15)**: `AAPL`, `MSFT`, `NVDA`, `GOOGL`, `AMZN`, `META`, `TSLA`, `AMD`, `INTC`, `QCOM`, `AVGO`, `CSCO`, `ORCL`, `CRM`, `ADBE`
