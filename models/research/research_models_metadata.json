@@ -1,0 +1,57 @@
+{
+    "system_name": "Research & Evaluation Multi-Expert System (80/20 Train-Test Benchmark)",
+    "version": "4.0.0-research",
+    "training_split": "80% Chronological Time-Series",
+    "train_samples": 2779,
+    "test_samples": 695,
+    "features": [
+        "Resistance_Distance_%",
+        "Close_Position",
+        "Volume_Ratio",
+        "Volume_Surge_10",
+        "Distance_MA10_%",
+        "Distance_MA30_%",
+        "MA_Ratio",
+        "Momentum_5d_%",
+        "Momentum_10d_%",
+        "Momentum_20d_%",
+        "ATR_Pct",
+        "Daily_Range_%",
+        "Range_Ratio",
+        "Volatility_10d",
+        "Price_Range_10d_%",
+        "RSI_14",
+        "Breakout_Pct",
+        "Upper_Shadow_Pct",
+        "Volume_Conviction",
+        "Momentum_Accel_5_20",
+        "Squeeze_Tightness",
+        "Extension_ATR_Ratio"
+    ],
+    "experts": {
+        "conservative": {
+            "model_path": "models/research/research_expert_conservative.json",
+            "model_type": "xgboost",
+            "loss_weight": 5.0,
+            "win_rate": 88.66,
+            "fakeout_recall": 58.47,
+            "roc_auc": 0.6721
+        },
+        "balanced": {
+            "model_path": "models/research/research_expert_balanced_lgbm.txt",
+            "model_type": "lightgbm",
+            "loss_weight": 3.0,
+            "win_rate": 84.97,
+            "market_capture": 84.23,
+            "roc_auc": 0.6671
+        },
+        "aggressive": {
+            "model_path": "models/research/research_expert_aggressive.json",
+            "model_type": "xgboost",
+            "loss_weight": 1.0,
+            "win_rate": 83.28,
+            "market_capture": 98.44,
+            "roc_auc": 0.6557
+        }
+    }
+}
