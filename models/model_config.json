@@ -1,6 +1,6 @@
 {
     "model_name": "xgboost_breakout_champion",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "features": [
         "Resistance_Distance_%",
         "Close_Position",
@@ -20,9 +20,16 @@
         "RSI_14",
         "Breakout_Pct"
     ],
-    "optimal_threshold": 0.7,
     "target_mapping": {
         "fakeout": 0,
         "breakout": 1
+    },
+    "optimal_threshold": 0.5,
+    "evaluation_metrics": {
+        "breakout_precision": 90.1,
+        "fakeout_recall": 67.8,
+        "roc_auc": 0.6708,
+        "deadly_fp_count": 38,
+        "profitable_tp_count": 346
     }
 }
