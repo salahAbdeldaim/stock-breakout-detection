@@ -1632,25 +1632,50 @@
         </div>
       </div>
 
-      <div class="quant-card accent-amber">
-        <div class="card-title" style="color: var(--color-amber);">Strategic Roadmap (Next Milestones)</div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
-          <div>
-            <strong style="color: #fff;">Milestone 01: Options Overlay</strong><br>
-            Incorporating implied volatility skew and options delta flow to anticipate institutional gamma squeezes.
+            <div style="display: grid; grid-template-columns: 1.45fr 1fr; gap: 1.25rem; margin-bottom: 1.25rem;">
+        <!-- Left: Strategic Roadmap -->
+        <div class="quant-card accent-amber" style="padding: 1.25rem 1.4rem;">
+          <div class="card-title" style="color: var(--color-amber); font-size: 1.05rem; margin-bottom: 0.6rem;">Strategic Roadmap (Next Milestones)</div>
+          <div style="display: flex; flex-direction: column; gap: 0.65rem; font-size: 0.82rem; color: var(--text-muted);">
+            <div>
+              <strong style="color: #fff;">Milestone 01: Options Overlay</strong> &mdash; Implied volatility skew &amp; options delta flow to anticipate gamma squeezes.
+            </div>
+            <div>
+              <strong style="color: #fff;">Milestone 02: Intraday Tick Streaming</strong> &mdash; 5-min order-book imbalance feeds via WebSocket.
+            </div>
+            <div>
+              <strong style="color: #fff;">Milestone 03: Live Broker Bridge</strong> &mdash; Direct FIX protocol connectivity to Interactive Brokers &amp; Alpaca.
+            </div>
           </div>
-          <div>
-            <strong style="color: #fff;">Milestone 02: Intraday Tick Streaming</strong><br>
-            Transitioning from daily close to 5-minute real-time order-book imbalance feeds via WebSocket.
+        </div>
+
+        <!-- Right: Live Production Terminal QR Code -->
+        <div class="quant-card accent-cyan" style="padding: 1.1rem 1.3rem; display: flex; flex-direction: column; justify-content: center; background: radial-gradient(circle at 90% 10%, rgba(56, 189, 248, 0.12), transparent 70%), var(--bg-card);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
+            <span style="font-size: 0.78rem; font-weight: 800; color: #34d399; letter-spacing: 0.08em; display: flex; align-items: center; gap: 6px; font-family: var(--font-mono);">
+              <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 10px #10b981; display: inline-block;"></span>
+              LIVE PRODUCTION TERMINAL
+            </span>
+            <span style="font-size: 0.68rem; color: var(--color-brand); border: 1px solid rgba(56, 189, 248, 0.35); padding: 1px 6px; border-radius: 4px; font-family: var(--font-mono);">SSL SECURED</span>
           </div>
-          <div>
-            <strong style="color: #fff;">Milestone 03: Live Broker Bridge</strong><br>
-            Direct FIX protocol connectivity to Interactive Brokers and Alpaca for one-click trade execution.
+
+          <div style="display: flex; align-items: center; gap: 1rem;">
+            <div style="background: #ffffff; padding: 6px; border-radius: 10px; box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); line-height: 0; flex-shrink: 0;">
+              <img src="stockpred_qr.png" alt="Scan to launch StockPred terminal" style="width: 100px; height: 100px; display: block; border-radius: 4px;" />
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+              <a href="https://stockpred.pages.dev" target="_blank" style="color: #fff; font-family: var(--font-mono); font-size: 0.88rem; font-weight: 700; text-decoration: none; display: flex; align-items: center; gap: 4px;">
+                stockpred.pages.dev <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+              </a>
+              <p style="font-size: 0.76rem; color: var(--text-muted); margin: 0; line-height: 1.35;">
+                Scan with phone camera to test live Tri-Expert inference &amp; inspect breakouts.
+              </p>
+            </div>
           </div>
         </div>
       </div>
 
-      <div style="margin-top: 1.5rem; text-align: center; font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: #fff;">
+      <div style="margin-top: 1rem; text-align: center; font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: #fff;">
         Thank You <span style="color: var(--color-brand); margin: 0 0.4rem;">/</span> Open for Technical Defense &amp; Committee Q&amp;A
       </div>
 
