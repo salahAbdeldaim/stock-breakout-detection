@@ -41,7 +41,7 @@ export default function CopilotDrawer({
     if (isOpen && messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isThinking, isOpen]);
+  }, [messages, isThinking, transcribing, isOpen]);
 
   // Setup Web Speech Recognition
   useEffect(() => {
@@ -387,17 +387,36 @@ export default function CopilotDrawer({
             ))}
 
             {/* Thinking / Transcribing Indicator */}
-            {(isThinking || transcribing) && (
+            {transcribing && (
               <div className="copilot-bubble-row assistant-row">
-                <div className="copilot-bubble assistant-bubble thinking-bubble">
-                  <div className="copilot-thinking-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div className="copilot-bubble assistant-bubble copilot-transcribing-bubble">
+                  <div className="copilot-audio-wave-anim">
+                    <span></span><span></span><span></span><span></span><span></span>
                   </div>
-                  <span className="copilot-thinking-text">
-                    {transcribing ? t('copilotProcessingAudio') : t('copilotThinking')}
-                  </span>
+                  <div className="copilot-loading-details">
+                    <span className="copilot-loading-title">
+                      {lang === 'ar' ? 'جاري تفريغ الصوت وتحليله عبر الذكاء الاصطناعي...' : 'Transcribing voice via Groq Whisper...'}
+                    </span>
+                    <span className="copilot-loading-sub">
+                      {lang === 'ar' ? 'معالجة التسجيل الصوتي بدقة عالية واستخراج الاستفسار...' : 'Processing audio speech and extracting query...'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {isThinking && (
+              <div className="copilot-bubble-row assistant-row">
+                <div className="copilot-bubble assistant-bubble copilot-thinking-bubble">
+                  <Loader2 size={18} className="spin-icon" color="#38bdf8" />
+                  <div className="copilot-loading-details">
+                    <span className="copilot-loading-title">
+                      {lang === 'ar' ? 'جاري التدقيق وتشغيل محرك الخبراء الثلاثة...' : 'Auditing setup with Tri-Expert Engine...'}
+                    </span>
+                    <span className="copilot-loading-sub">
+                      {lang === 'ar' ? 'فحص كسر المقاومة • قياس تدفق السيولة • استخراج شلال TreeSHAP' : 'Scanning Resistance • Volume Surge • TreeSHAP Waterfall'}
+                    </span>
+                  </div>
                 </div>
               </div>
             )}
@@ -421,6 +440,17 @@ export default function CopilotDrawer({
               </div>
             )}
 
+            {(isThinking || transcribing) && (
+              <div className="copilot-active-status-bar">
+                <Loader2 size={13} className="spin-icon" color="#38bdf8" />
+                <span>
+                  {transcribing
+                    ? (lang === 'ar' ? 'جاري تحويل التسجيل الصوتي إلى نص...' : 'Transcribing voice audio...')
+                    : (lang === 'ar' ? 'جاري التحليل والتدقيق الكمي في محرك الذكاء الاصطناعي...' : 'AI Engine is auditing quantitative setup...')}
+                </span>
+              </div>
+            )}
+
             <form
               className="copilot-input-form"
               onSubmit={(e) => {
@@ -431,17 +461,26 @@ export default function CopilotDrawer({
               <input
                 type="text"
                 className="copilot-input-field"
-                placeholder={isListening ? t('copilotListening') : t('copilotPlaceholder')}
+                placeholder={
+                  transcribing
+                    ? (lang === 'ar' ? 'جاري تفريغ الصوت...' : 'Transcribing voice...')
+                    : isThinking
+                    ? (lang === 'ar' ? 'جاري معالجة الطلب...' : 'Processing query...')
+                    : isListening
+                    ? t('copilotListening')
+                    : t('copilotPlaceholder')
+                }
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                disabled={isThinking}
+                disabled={isThinking || transcribing}
               />
 
               {/* Voice Record Button */}
               <button
                 type="button"
-                className={`copilot-mic-btn ${isListening ? 'active-listening' : ''}`}
+                className={`copilot-mic-btn ${isListening ? 'active-listening' : ''} ${transcribing ? 'transcribing-pulse' : ''}`}
                 onClick={handleToggleVoice}
+                disabled={isThinking || transcribing}
                 title={isListening ? 'Stop' : 'Voice Input'}
               >
                 {isListening ? <MicOff size={16} /> : <Mic size={16} />}
@@ -451,10 +490,14 @@ export default function CopilotDrawer({
               <button
                 type="submit"
                 className="copilot-send-btn"
-                disabled={!input.trim() || isThinking}
+                disabled={!input.trim() || isThinking || transcribing}
                 title={t('copilotSend')}
               >
-                <Send size={15} />
+                {isThinking || transcribing ? (
+                  <Loader2 size={15} className="spin-icon" />
+                ) : (
+                  <Send size={15} />
+                )}
               </button>
             </form>
           </div>
