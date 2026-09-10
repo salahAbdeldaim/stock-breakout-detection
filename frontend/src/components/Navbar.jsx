@@ -196,7 +196,8 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
             <div className="clock-time-segment">
               <Clock size={13} className="clock-icon" />
               <span className="clock-city">NYC</span>
-              <span className="clock-time">{timeData.nyDate} · {timeData.nyTime}</span>
+              <span className="clock-date">{timeData.nyDate} · </span>
+              <span className="clock-time">{timeData.nyTime}</span>
             </div>
 
             <span className="nav-pill-separator" />
@@ -225,7 +226,8 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
           {/* Engine Status */}
           <div className="system-status-pill" title={t('engineOnline')}>
             <span className="pulse-dot"></span>
-            <span className="engine-status-text">{t('engineOnline')}</span>
+            <span className="engine-status-text engine-status-full">{t('engineOnline')}</span>
+            <span className="engine-status-text engine-status-compact">{t('engineOnlineCompact') || '3 EXPERTS'}</span>
           </div>
 
           {/* Presentation Deck Link */}
@@ -233,12 +235,11 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
             href={import.meta.env.VITE_PRESENTATION_URL || "https://45.39.253.4.sslip.io/presentation/"}
             target="_blank"
             rel="noopener noreferrer"
-            className="lang-btn"
-            style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '5px', padding: '0.35rem 0.75rem', background: 'rgba(56, 189, 248, 0.1)', borderColor: 'rgba(56, 189, 248, 0.3)' }}
-            title={lang === 'ar' ? 'فتح العرض التقديمي التنفيذي للمشروع' : 'Open Executive Presentation Deck (20 Slides)'}
+            className="nav-presentation-btn"
+            title={lang === 'ar' ? 'فتح العرض التقديمي التنفيذي للمشروع' : 'Open Executive Presentation Deck (19 Slides)'}
           >
-            <Sparkles size={12} color="#38bdf8" />
-            <span style={{ color: '#38bdf8', fontWeight: 600 }}>{lang === 'ar' ? 'العرض التقديمي' : 'Slides'}</span>
+            <Sparkles size={13} className="nav-btn-icon" />
+            <span>{lang === 'ar' ? 'العرض التقديمي' : 'Slides'}</span>
           </a>
 
           {/* Full Language Switcher Toggle */}
