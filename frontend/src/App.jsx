@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
+import { Zap, AlertTriangle } from 'lucide-react';
+import { LanguageProvider, useLanguage } from './LanguageContext';
 import Navbar from './components/Navbar';
 import Controls from './components/Controls';
 import CandlestickChart from './components/CandlestickChart';
 import DecisionCard from './components/DecisionCard';
 import TriExpertMatrix from './components/TriExpertMatrix';
 import TreeSHAPView from './components/TreeSHAPView';
+import CopilotDrawer from './components/CopilotDrawer';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://45.39.253.4.sslip.io/api';
 
-export default function App() {
+function DashboardContent() {
+  const { lang, t } = useLanguage();
   const [stocks, setStocks] = useState([]);
   const [presets, setPresets] = useState([]);
   const [selectedPreset, setSelectedPreset] = useState(null);
@@ -57,21 +61,21 @@ export default function App() {
     initData();
   }, []);
 
-  // 2. Fetch Chart Data whenever ticker changes
-  useEffect(() => {
-    if (!selectedTicker) return;
-    async function loadChart() {
-      try {
-        const res = await fetch(`${API_BASE}/chart/${selectedTicker}?limit=150`);
-        if (!res.ok) throw new Error('Chart data unavailable');
-        const json = await res.json();
-        setChartData(json);
-      } catch (err) {
-        console.error('Error fetching chart data:', err);
-      }
+  // 2. Fetch Chart Data (Supports date-window centering around inspected candle)
+  const loadChart = async (ticker = selectedTicker, date = selectedDate) => {
+    if (!ticker) return;
+    try {
+      const url = date
+        ? `${API_BASE}/chart/${ticker}?target_date=${date}&limit=160`
+        : `${API_BASE}/chart/${ticker}?limit=160`;
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('Chart data unavailable');
+      const json = await res.json();
+      setChartData(json);
+    } catch (err) {
+      console.error('Error fetching chart data:', err);
     }
-    loadChart();
-  }, [selectedTicker]);
+  };
 
   // 3. Run Quantitative Audit
   const handleRunAudit = async (ticker = selectedTicker, date = selectedDate) => {
@@ -79,6 +83,9 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
+      // Synchronize chart to show the exact audited candle and surrounding window
+      loadChart(ticker, date);
+
       const res = await fetch(`${API_BASE}/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -112,6 +119,7 @@ export default function App() {
     const targetDate = meta?.end_date || '';
     if (targetDate) {
       setSelectedDate(targetDate);
+      loadChart(ticker, targetDate);
       handleRunAudit(ticker, targetDate);
     }
   };
@@ -121,6 +129,7 @@ export default function App() {
     setSelectedPreset(null);
     if (latestAvailableDate) {
       setSelectedDate(latestAvailableDate);
+      loadChart(selectedTicker, latestAvailableDate);
       handleRunAudit(selectedTicker, latestAvailableDate);
     }
   };
@@ -142,11 +151,15 @@ export default function App() {
       }
 
       const data = await res.json();
-      setStatusNotice(`⚡ Live market data updated for ${ticker} up to ${data.latest_date} ($${data.latest_price})!`);
+      setStatusNotice(
+        lang === 'ar'
+          ? `تم تحديث بيانات السوق المباشرة لسهم ${ticker} حتى ${data.latest_date} ($${data.latest_price})!`
+          : `Live market data updated for ${ticker} up to ${data.latest_date} ($${data.latest_price})!`
+      );
 
       // Refresh chart and stocks
       const [chartRes, stocksRes] = await Promise.all([
-        fetch(`${API_BASE}/chart/${ticker}?limit=150`),
+        fetch(`${API_BASE}/chart/${ticker}?target_date=${data.latest_date}&limit=160`),
         fetch(`${API_BASE}/stocks`)
       ]);
       const chartJson = await chartRes.json();
@@ -175,7 +188,17 @@ export default function App() {
     setSelectedPreset(preset);
     setSelectedTicker(preset.ticker);
     setSelectedDate(preset.date);
+    loadChart(preset.ticker, preset.date);
     handleRunAudit(preset.ticker, preset.date);
+  };
+
+  // 8. Handle AI Copilot Stock & Date Auto-Sync
+  const handleSelectStockAndDate = (ticker, date) => {
+    setSelectedPreset(null);
+    setSelectedTicker(ticker);
+    setSelectedDate(date);
+    loadChart(ticker, date);
+    handleRunAudit(ticker, date);
   };
 
   return (
@@ -201,8 +224,6 @@ export default function App() {
         setSelectedModel={setSelectedModel}
         onRunAudit={() => handleRunAudit()}
         onRefreshLive={handleRefreshLive}
-        onSetLatestDate={handleSetLatestDate}
-        latestAvailableDate={latestAvailableDate}
         loading={loading}
         refreshing={refreshing}
       />
@@ -218,10 +239,14 @@ export default function App() {
             borderRadius: '8px',
             marginBottom: '1.25rem',
             fontSize: '0.85rem',
-            fontFamily: 'var(--font-mono)'
+            fontFamily: 'var(--font-mono)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}
         >
-          {statusNotice}
+          <Zap size={15} />
+          <span>{statusNotice}</span>
         </div>
       )}
 
@@ -235,10 +260,14 @@ export default function App() {
             padding: '0.85rem 1.25rem',
             borderRadius: '8px',
             marginBottom: '1.25rem',
-            fontSize: '0.85rem'
+            fontSize: '0.85rem',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem'
           }}
         >
-          <span>⚠️ {error}</span>
+          <AlertTriangle size={15} />
+          <span>{error}</span>
         </div>
       )}
 
@@ -273,14 +302,30 @@ export default function App() {
       {/* Terminal Footer */}
       <footer className="terminal-footer">
         <div>
-          <span>QUANTBREAKOUT AI TERMINAL // FASTAPI + REACT VITE</span>
+          <span>{t('footerTitle')}</span>
         </div>
-        <div style={{ display: 'flex', gap: '1.5rem' }}>
-          <span>WIN RATE: 83.3% - 90.1%</span>
-          <span>MARKET CAPTURE: 98.6%</span>
-          <span>LIVE MARKET FETCH: ACTIVE (YFINANCE)</span>
+        <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <span>{t('footerWinRate')}</span>
+          <span>{t('footerCapture')}</span>
+          <span>{t('footerLiveFetch')}</span>
         </div>
       </footer>
+
+      {/* Floating Autonomous AI Copilot */}
+      <CopilotDrawer
+        selectedTicker={selectedTicker}
+        selectedDate={selectedDate}
+        onSelectStockAndDate={handleSelectStockAndDate}
+        apiBase={import.meta.env.VITE_API_BASE_HOST || "https://45.39.253.4.sslip.io"}
+      />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <LanguageProvider>
+      <DashboardContent />
+    </LanguageProvider>
   );
 }

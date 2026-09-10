@@ -34,30 +34,170 @@ FEATURE_COLS = [
     "Extension_ATR_Ratio"
 ]
 
-FEATURE_DESCRIPTIONS = {
-    "Resistance_Distance_%": "Clearance above 30d resistance level",
-    "Close_Position": "Intraday close strength (near high of day)",
-    "Volume_Ratio": "Volume surge vs 30-day baseline average",
-    "Volume_Surge_10": "Short-term volume surge vs 10-day average",
-    "Distance_MA10_%": "Extension above short-term 10-day trend",
-    "Distance_MA30_%": "Extension above intermediate 30-day trend",
-    "MA_Ratio": "Moving average alignment (MA10 / MA30)",
-    "Momentum_5d_%": "5-day trailing price velocity",
-    "Momentum_10d_%": "10-day trailing price velocity",
-    "Momentum_20d_%": "20-day trailing price velocity",
-    "ATR_Pct": "Normalized price volatility (ATR % of Close)",
-    "Daily_Range_%": "Intraday high-low expansion range",
-    "Range_Ratio": "Intraday expansion vs 10-day average range",
-    "Volatility_10d": "10-day historical standard deviation",
-    "Price_Range_10d_%": "Pre-breakout consolidation tightness (Squeeze)",
-    "RSI_14": "14-day Relative Strength Index (Momentum/Overbought)",
+FEATURE_INVESTOR_METADATA = {
+    "Resistance_Distance_%": {
+        "name": "Resistance Clearance",
+        "name_ar": "قوة اختراق المقاومة",
+        "description": "How high the price closed above 30-day resistance ceiling.",
+        "description_ar": "مدى ارتفاع السعر فوق سقف المقاومة لـ 30 يوماً لتأكيد كسر القمة.",
+        "unit": "%"
+    },
+    "Close_Position": {
+        "name": "Close Near High (Bullish Grip)",
+        "name_ar": "قوة الإغلاق قرب القمة",
+        "description": "Intraday close strength within the day's high-low range (>0.70 means buyers dominated).",
+        "description_ar": "موقع إغلاق الشمعة مقارنة بنطاق اليوم (>0.70 يعني سيطرة تامة للمشترين).",
+        "unit": "ratio"
+    },
+    "Volume_Ratio": {
+        "name": "Institutional Volume Surge",
+        "name_ar": "تدفق السيولة المؤسسية (حجم التداول)",
+        "description": "Breakout day volume multiple relative to 30-day baseline average.",
+        "description_ar": "تضاعف كميات التداول مقارنة بالمتوسط اليومي الطبيعي للشهر الماضي.",
+        "unit": "x"
+    },
+    "Volume_Surge_10": {
+        "name": "Short-Term Volume Surge",
+        "name_ar": "زخم السيولة السريع (10 أيام)",
+        "description": "Volume multiple relative to recent 10-day average volume.",
+        "description_ar": "تضاعف حجم التداول مقارنة بمتوسط آخر 10 أيام تداول.",
+        "unit": "x"
+    },
+    "Distance_MA10_%": {
+        "name": "10-Day Trend Extension",
+        "name_ar": "التباعد عن متوسط 10 أيام",
+        "description": "Percentage distance of price above the short-term 10-day moving average.",
+        "description_ar": "نسبة ابتعاد السعر فوق متوسط الحركة قصير الأجل (10 أيام).",
+        "unit": "%"
+    },
+    "Distance_MA30_%": {
+        "name": "30-Day Trend Extension",
+        "name_ar": "التباعد عن متوسط 30 يوماً",
+        "description": "Percentage distance of price above the intermediate 30-day moving average.",
+        "description_ar": "نسبة ابتعاد السعر فوق متوسط الحركة متوسط الأجل (30 يوماً).",
+        "unit": "%"
+    },
+    "MA_Ratio": {
+        "name": "Trend Alignment (MA10 / MA30)",
+        "name_ar": "توافق اتجاه المتوسطات (MA10 / MA30)",
+        "description": "Alignment ratio of short-term to medium-term trend (>1.0 confirms healthy bull trend).",
+        "description_ar": "ترتيب المسار الصاعد (>1.0 يؤكد ترتيب متوسط 10 أيام فوق 30 يوماً).",
+        "unit": "ratio"
+    },
+    "Momentum_5d_%": {
+        "name": "5-Day Velocity",
+        "name_ar": "السرعة والعائد السريع (5 أيام)",
+        "description": "Trailing 5-day percentage price change.",
+        "description_ar": "نسبة الصعود التراكمي للسهم خلال آخر 5 أيام عمل.",
+        "unit": "%"
+    },
+    "Momentum_10d_%": {
+        "name": "10-Day Momentum",
+        "name_ar": "الزخم التراكمي (10 أيام)",
+        "description": "Trailing 10-day percentage price change.",
+        "description_ar": "نسبة الصعود التراكمي للسهم خلال آخر 10 أيام عمل.",
+        "unit": "%"
+    },
+    "Momentum_20d_%": {
+        "name": "20-Day Momentum",
+        "name_ar": "الزخم الشهري (20 يوماً)",
+        "description": "Trailing 20-day percentage price change.",
+        "description_ar": "نسبة الصعود التراكمي للسهم خلال شهر تداول كامل.",
+        "unit": "%"
+    },
+    "ATR_Pct": {
+        "name": "Normalized Volatility Risk (ATR)",
+        "name_ar": "معدل التذبذب والمخاطرة (ATR %)",
+        "description": "Average True Range as a percentage of price (normalized volatility).",
+        "description_ar": "معدل المدى السعري الحقيقي بالنسبة لسعر السهم (مقياس التذبذب ومخاطرة التقلب).",
+        "unit": "%"
+    },
+    "Daily_Range_%": {
+        "name": "Breakout Day Range",
+        "name_ar": "نطاق تذبذب شمعة اليوم",
+        "description": "Intraday high-to-low percentage spread on breakout day.",
+        "description_ar": "نسبة الفارق بين أعلى وأدنى سعر تم تسجيله خلال شمعة الاختراق.",
+        "unit": "%"
+    },
+    "Range_Ratio": {
+        "name": "Candle Expansion Ratio",
+        "name_ar": "نسبة اتساع الشمعة اليومية",
+        "description": "Today's range compared to 10-day average daily range.",
+        "description_ar": "مدى اتساع شمعة اليوم مقارنة بمتوسط طول الشموع لآخر 10 أيام.",
+        "unit": "x"
+    },
+    "Volatility_10d": {
+        "name": "Historical Volatility (10d)",
+        "name_ar": "التقلب التاريخي (10 أيام)",
+        "description": "10-day standard deviation of daily prices.",
+        "description_ar": "الانحراف المعياري لأسعار الإغلاق لآخر 10 أيام.",
+        "unit": "pts"
+    },
+    "Price_Range_10d_%": {
+        "name": "10-Day Consolidation Squeeze",
+        "name_ar": "نطاق التجميع العرضي (10 أيام)",
+        "description": "Price spread over prior 10 days (tight range signals consolidation squeeze before breakout).",
+        "description_ar": "اتساع القناة السعرية لآخر 10 أيام (المدى الضيق يعكس تجميعاً وانفجاراً وشيكاً).",
+        "unit": "%"
+    },
+    "RSI_14": {
+        "name": "RSI Momentum Index",
+        "name_ar": "مؤشر القوة النسبية (RSI 14)",
+        "description": "14-day Relative Strength Index (measures momentum vs overbought extremes).",
+        "description_ar": "مؤشر القوة النسبية (يقيس قوة الدفع الشرائي والاقتراب من مناطق ذروة الشراء).",
+        "unit": "pts"
+    },
     # 5 Alpha Interaction Features
-    "Upper_Shadow_Pct": "Intraday rejection shadow (% drop from high to close)",
-    "Volume_Conviction": "Conviction volume (Volume Surge x Closing Position)",
-    "Momentum_Accel_5_20": "Short-term momentum acceleration vs 20d velocity",
-    "Squeeze_Tightness": "Consolidation squeeze tightness relative to ATR",
-    "Extension_ATR_Ratio": "Trend extension risk relative to volatility unit"
+    "Upper_Shadow_Pct": {
+        "name": "Upper Wick Selling Pressure",
+        "name_ar": "ضغط البيع اللحظي (الظل العلوي)",
+        "description": "Intraday rejection (% drop from high to close; long wick signals selling pressure / trap risk).",
+        "description_ar": "نسبة التراجع من القمة للإغلاق (الظل الطويل يعكس ضغط بيع ومقاومة مصيدة).",
+        "unit": "%"
+    },
+    "Volume_Conviction": {
+        "name": "Institutional Conviction",
+        "name_ar": "إصرار المشترين (حجم × إغلاق)",
+        "description": "Interaction of volume surge multiplied by high close position (confirms buyer conviction).",
+        "description_ar": "قوة قناعة المشترين الناتجة عن تدفق حجم تداول كبير متزامن مع إغلاق قرب القمة.",
+        "unit": "pts"
+    },
+    "Momentum_Accel_5_20": {
+        "name": "Momentum Acceleration",
+        "name_ar": "تسارع حركة السعر (5 vs 20 يوم)",
+        "description": "Difference between 5-day velocity and 20-day velocity (positive = accelerating thrust).",
+        "description_ar": "الفارق بين سرعة الصعود لـ 5 أيام والـ 20 يوماً (القيم الإيجابية تعني تسارع السعر).",
+        "unit": "%"
+    },
+    "Squeeze_Tightness": {
+        "name": "Consolidation Squeeze Tightness",
+        "name_ar": "شدة ضغط التجميع (Squeeze)",
+        "description": "Pre-breakout squeeze tightness relative to ATR (tighter squeeze leads to higher breakout win rates).",
+        "description_ar": "درجة انحصار السعر نسبة إلى التذبذب (كلما زاد الضغط زادت احتمالية الاختراق الحقيقي).",
+        "unit": "pts"
+    },
+    "Extension_ATR_Ratio": {
+        "name": "Trend Extension Risk",
+        "name_ar": "مخاطرة التمدد السعري المفرط",
+        "description": "Price extension above moving average measured in ATR units (guards against chasing extended stocks).",
+        "description_ar": "قياس تباعد السعر المفرط عن المتوسط بوحدات التذبذب (ATR) لتفادي الشراء في القمم.",
+        "unit": "ratio"
+    }
 }
+
+FEATURE_DESCRIPTIONS = {k: v["description"] for k, v in FEATURE_INVESTOR_METADATA.items()}
+
+def format_feature_value(val: float, unit: str) -> str:
+    """Formats numeric feature values with proper financial investor units."""
+    if unit == "%":
+        return f"{val:+.2f}%" if val != 0 else f"{val:.2f}%"
+    elif unit == "x":
+        return f"{val:.2f}x"
+    elif unit == "ratio":
+        return f"{val:.3f}"
+    else:
+        return f"{val:.2f}"
+
 
 LOOKBACK = 30
 BREAKOUT_PCT = 0.01       # 1% clearance above resistance
@@ -175,7 +315,7 @@ class MultiExpertSystem:
         }
 
     def compute_features(self, df_stock, target_idx=-1):
-        """Computes all 22 predictive Day-0 features for a given candle index without lookahead bias."""
+        """Computes all 21 predictive Day-0 features for a given candle index without lookahead bias."""
         if target_idx < 0:
             target_idx = len(df_stock) + target_idx
             
@@ -343,19 +483,45 @@ class MultiExpertSystem:
             
             support_factors = []
             for feat, impact in top_support.items():
+                meta = FEATURE_INVESTOR_METADATA.get(feat, {
+                    "name": feat.replace("_", " "),
+                    "name_ar": feat,
+                    "description": feat,
+                    "description_ar": feat,
+                    "unit": "pts"
+                })
+                val = float(candle[feat])
                 support_factors.append({
                     "feature": feat,
-                    "description": FEATURE_DESCRIPTIONS.get(feat, feat),
-                    "value": round(float(candle[feat]), 3),
+                    "name": meta["name"],
+                    "name_ar": meta["name_ar"],
+                    "description": meta["description"],
+                    "description_ar": meta["description_ar"],
+                    "unit": meta["unit"],
+                    "value": round(val, 3),
+                    "formatted_value": format_feature_value(val, meta["unit"]),
                     "impact": round(float(impact), 3)
                 })
                 
             doubt_factors = []
             for feat, impact in top_doubt.items():
+                meta = FEATURE_INVESTOR_METADATA.get(feat, {
+                    "name": feat.replace("_", " "),
+                    "name_ar": feat,
+                    "description": feat,
+                    "description_ar": feat,
+                    "unit": "pts"
+                })
+                val = float(candle[feat])
                 doubt_factors.append({
                     "feature": feat,
-                    "description": FEATURE_DESCRIPTIONS.get(feat, feat),
-                    "value": round(float(candle[feat]), 3),
+                    "name": meta["name"],
+                    "name_ar": meta["name_ar"],
+                    "description": meta["description"],
+                    "description_ar": meta["description_ar"],
+                    "unit": meta["unit"],
+                    "value": round(val, 3),
+                    "formatted_value": format_feature_value(val, meta["unit"]),
                     "impact": round(float(impact), 3)
                 })
                 
@@ -375,19 +541,19 @@ class MultiExpertSystem:
         tight_stop_price = round(candle["Close"] * (1 - min(candle["ATR_Pct"]*0.5, 2.5)/100), 2)
         
         if approval_count >= 2:
-            tier = "TIER 1: HIGH-CONVICTION SETUP (Institutional Consensus 🟢)"
+            tier = "TIER 1: HIGH-CONVICTION SETUP (Institutional Consensus)"
             alloc = "100% (FULL POSITION SIZE)"
             action = "STRONG LONG EXECUTION"
             stop_guide = f"Standard Stop-Loss: ${atr_stop_price} (-{candle['ATR_Pct']:.2f}% | 1.0 ATR)"
             why_tier = "2 or 3 experts approved. Setup has elite probability of sustained 30-day continuation (Win Rate ~88-90%)."
         elif approval_count == 1:
-            tier = "TIER 2: SPECULATIVE MOMENTUM (Capture Upside with Controlled Risk 🟡)"
+            tier = "TIER 2: SPECULATIVE MOMENTUM (Capture Upside with Controlled Risk)"
             alloc = "50% (HALF POSITION SIZE)"
             action = "ENTER LONG WITH TIGHT STOP (Do NOT miss the breakout, but cap trap loss!)"
             stop_guide = f"TIGHT Dynamic Stop-Loss: ${tight_stop_price} (-2.50% or Breakeven on Day +2)"
             why_tier = "Momentum Hunter approved, but Conservative expert flagged doubt. Half-size allocation captures the +15% to +30% run if genuine, while capping potential trap loss to just -1.25% portfolio impact!"
         else:
-            tier = "TIER 3: HIGH-RISK BULL TRAP (Unanimous Disapproval 🔴)"
+            tier = "TIER 3: HIGH-RISK BULL TRAP (Unanimous Disapproval)"
             alloc = "0% (STAND ASIDE / NO CAPITAL AT RISK)"
             action = "AVOID TRADE / DO NOT ENTER"
             stop_guide = "N/A - Trade filtered to preserve capital."

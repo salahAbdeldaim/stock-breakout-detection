@@ -1,5 +1,6 @@
-# 📈 Algorithmic Stock Breakout & Fakeout Detection Pipeline
-### High-Precision Machine Learning & Quantitative Screening Across 50 US Equities
+# 📈 StockPred - Algorithmic Stock Breakout & Fakeout Detection
+### Developed by Team: Stockbrokers
+#### High-Precision Machine Learning & Quantitative Screening Across 50 US Equities
 
 An end-to-end quantitative research framework and machine learning pipeline to identify, label, and classify **price breakouts** vs. **fakeouts (bull traps)** using technical price action, volume dynamics, volatility compression, and forward-looking validation.
 

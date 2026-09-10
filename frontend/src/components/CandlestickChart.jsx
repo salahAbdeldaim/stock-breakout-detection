@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Crosshair, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Crosshair, TrendingUp, AlertTriangle, Target } from 'lucide-react';
+import { useLanguage } from '../LanguageContext';
 
 export default function CandlestickChart({
   chartData,
@@ -7,6 +8,7 @@ export default function CandlestickChart({
   ticker,
   name
 }) {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const [hoverIndex, setHoverIndex] = useState(null);
 
@@ -29,13 +31,33 @@ export default function CandlestickChart({
     let maxVol = 0;
     let targetIdx = -1;
 
+    let cleanTarget = targetDate;
+    if (cleanTarget && cleanTarget.includes('/')) {
+      const parts = cleanTarget.split('/');
+      if (parts.length === 3 && parts[2].length === 4) {
+        cleanTarget = `${parts[2]}-${parts[0].padStart(2, '0')}-${parts[1].padStart(2, '0')}`;
+      }
+    }
+
     candles.forEach((c, idx) => {
       if (c.low < min) min = c.low;
       if (c.high > max) max = c.high;
       if (c.resistance_30d && c.resistance_30d > max) max = c.resistance_30d;
       if (c.volume > maxVol) maxVol = c.volume;
-      if (c.date === targetDate) targetIdx = idx;
+      if (c.date === targetDate || c.date === cleanTarget || (cleanTarget && c.date.startsWith(cleanTarget))) {
+        targetIdx = idx;
+      }
     });
+
+    // Fallback: If exact trading day not matched, lock to closest prior trading candle
+    if (targetIdx === -1 && cleanTarget) {
+      for (let i = candles.length - 1; i >= 0; i--) {
+        if (candles[i].date <= cleanTarget) {
+          targetIdx = i;
+          break;
+        }
+      }
+    }
 
     const padding = (max - min) * 0.08 || 5;
     return {
@@ -115,23 +137,34 @@ export default function CandlestickChart({
         {activeCandle && (
           <div className="stock-metrics-strip">
             <div className="metric-tag">
-              <span className="metric-tag-label">DATE</span>
-              <span className="metric-tag-val">{activeCandle.date}</span>
+              <span className="metric-tag-label" style={{ display: 'flex', alignItems: 'center' }}>
+                {targetIndex !== -1 && activeCandle.date === candles[targetIndex]?.date ? (
+                  <>
+                    <Target size={11} style={{ display: 'inline', marginInlineEnd: '4px' }} />
+                    <span>{t('metricAuditedDate')}</span>
+                  </>
+                ) : (
+                  <span>{t('metricDate')}</span>
+                )}
+              </span>
+              <span className="metric-tag-val" style={{ color: '#38bdf8', fontWeight: 700 }}>
+                {activeCandle.date}
+              </span>
             </div>
             <div className="metric-tag">
-              <span className="metric-tag-label">CLOSE</span>
+              <span className="metric-tag-label">{t('metricClose')}</span>
               <span className="metric-tag-val" style={{ color: activeCandle.close >= activeCandle.open ? '#10b981' : '#ef4444' }}>
                 ${activeCandle.close.toFixed(2)}
               </span>
             </div>
             <div className="metric-tag">
-              <span className="metric-tag-label">30D RESISTANCE</span>
+              <span className="metric-tag-label">{t('metric30dResistance')}</span>
               <span className="metric-tag-val" style={{ color: '#06b6d4' }}>
                 {activeCandle.resistance_30d ? `$${activeCandle.resistance_30d.toFixed(2)}` : 'N/A'}
               </span>
             </div>
             <div className="metric-tag">
-              <span className="metric-tag-label">VOLUME</span>
+              <span className="metric-tag-label">{t('metricVolume')}</span>
               <span className="metric-tag-val">
                 {(activeCandle.volume / 1e6).toFixed(2)}M ({activeCandle.vol_ratio}x)
               </span>
@@ -173,15 +206,16 @@ export default function CandlestickChart({
                   y1={y}
                   x2={svgWidth - margin.right}
                   y2={y}
-                  stroke="rgba(255, 255, 255, 0.05)"
+                  stroke="rgba(255, 255, 255, 0.09)"
                   strokeDasharray="4 4"
                 />
                 <text
                   x={svgWidth - margin.right + 8}
                   y={y + 4}
-                  fill="#64748b"
+                  fill="#94a3b8"
                   fontSize="10"
                   fontFamily="monospace"
+                  fontWeight="500"
                 >
                   ${priceVal.toFixed(1)}
                 </text>
@@ -195,16 +229,17 @@ export default function CandlestickChart({
             y1={volTop - 8}
             x2={svgWidth - margin.right}
             y2={volTop - 8}
-            stroke="rgba(255, 255, 255, 0.08)"
+            stroke="rgba(255, 255, 255, 0.14)"
           />
           <text
             x={margin.left}
             y={volTop + 12}
-            fill="#64748b"
+            fill="#94a3b8"
             fontSize="9"
             fontFamily="monospace"
+            fontWeight="500"
           >
-            VOL (SURGE REF 1.20x)
+            {t('volSurgeRef')}
           </text>
 
           {/* 30-Day Resistance Line */}
@@ -228,18 +263,39 @@ export default function CandlestickChart({
                 x2={getX(targetIndex)}
                 y2={volTop + volHeight}
                 stroke="#38bdf8"
-                strokeWidth="1.5"
-                strokeDasharray="3 3"
-                opacity="0.6"
+                strokeWidth="2"
+                strokeDasharray="4 2"
+                opacity="0.85"
               />
               <circle
                 cx={getX(targetIndex)}
                 cy={getY(candles[targetIndex].close)}
-                r="5"
+                r="6"
                 fill="#38bdf8"
                 stroke="#080c14"
-                strokeWidth="2"
+                strokeWidth="2.5"
               />
+              <rect
+                x={getX(targetIndex) - 55}
+                y={margin.top - 16}
+                width="110"
+                height="16"
+                fill="#0284c7"
+                rx="3"
+                stroke="#38bdf8"
+                strokeWidth="1"
+              />
+              <text
+                x={getX(targetIndex)}
+                y={margin.top - 4}
+                fill="#ffffff"
+                fontSize="8.5"
+                fontFamily="var(--font-mono)"
+                fontWeight="bold"
+                textAnchor="middle"
+              >
+                {t('auditedDateBadge')}
+              </text>
             </g>
           )}
 

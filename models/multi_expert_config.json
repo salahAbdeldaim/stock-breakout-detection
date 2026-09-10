@@ -1,47 +1,45 @@
 {
-  "version": "2.1.0-production",
-  "timestamp": "2026-09-09T20:50:01.106967",
-  "training_samples": 3474,
-  "features_count": 21,
-  "feature_names": [
-    "Resistance_Distance_%",
-    "Close_Position",
-    "Volume_Ratio",
-    "Volume_Surge_10",
-    "Distance_MA10_%",
-    "Distance_MA30_%",
-    "MA_Ratio",
-    "Momentum_5d_%",
-    "Momentum_10d_%",
-    "Momentum_20d_%",
-    "ATR_Pct",
-    "Daily_Range_%",
-    "Range_Ratio",
-    "Volatility_10d",
-    "Price_Range_10d_%",
-    "RSI_14",
-    "Upper_Shadow_Pct",
-    "Volume_Conviction",
-    "Momentum_Accel_5_20",
-    "Squeeze_Tightness",
-    "Extension_ATR_Ratio"
-  ],
-  "change_log": "v2.1.0: Removed redundant Breakout_Pct (was alias of Resistance_Distance_%)",
-  "experts": {
-    "Conservative": {
-      "type": "xgboost",
-      "weight": 5.0,
-      "threshold": 0.5
-    },
-    "Balanced": {
-      "type": "lightgbm",
-      "weight": 3.0,
-      "threshold": 0.5
-    },
-    "Aggressive": {
-      "type": "xgboost",
-      "weight": 1.0,
-      "threshold": 0.5
+    "system_name": "Multi-Expert Quantitative Breakout Decision System",
+    "version": "3.0.0",
+    "features": [
+        "Resistance_Distance_%",
+        "Close_Position",
+        "Volume_Ratio",
+        "Volume_Surge_10",
+        "Distance_MA10_%",
+        "Distance_MA30_%",
+        "MA_Ratio",
+        "Momentum_5d_%",
+        "Momentum_10d_%",
+        "Momentum_20d_%",
+        "ATR_Pct",
+        "Daily_Range_%",
+        "Range_Ratio",
+        "Volatility_10d",
+        "Price_Range_10d_%",
+        "RSI_14"
+    ],
+    "experts": {
+        "conservative": {
+            "model_path": "models/expert_conservative.json",
+            "loss_weight": 5.0,
+            "win_rate": 87.7,
+            "fakeout_recall": 55.08,
+            "roc_auc": 0.6525
+        },
+        "balanced": {
+            "model_path": "models/expert_balanced.json",
+            "loss_weight": 3.0,
+            "win_rate": 84.48,
+            "fakeout_recall": 27.12,
+            "roc_auc": 0.648
+        },
+        "aggressive": {
+            "model_path": "models/expert_aggressive.json",
+            "loss_weight": 1.0,
+            "win_rate": 82.89,
+            "market_capture": 98.27,
+            "roc_auc": 0.6629
+        }
     }
-  }
 }

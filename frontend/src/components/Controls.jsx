@@ -1,5 +1,6 @@
 import React from 'react';
-import { Search, Calendar, Cpu, Play, RefreshCw, Zap } from 'lucide-react';
+import { Search, Calendar, Cpu, Play, RefreshCw } from 'lucide-react';
+import { useLanguage } from '../LanguageContext';
 
 export default function Controls({
   stocks,
@@ -11,20 +12,18 @@ export default function Controls({
   setSelectedModel,
   onRunAudit,
   onRefreshLive,
-  onSetLatestDate,
-  latestAvailableDate,
   loading,
   refreshing
 }) {
-  const isLatest = selectedDate === latestAvailableDate;
+  const { t } = useLanguage();
 
   return (
     <div className="controls-panel">
       {/* Stock Selector */}
       <div className="control-item">
         <label className="control-label">
-          <Search size={12} style={{ display: 'inline', marginRight: '4px' }} />
-          Asset / Equity (50 US Stocks)
+          <Search size={12} style={{ display: 'inline', marginInlineEnd: '4px' }} />
+          {t('assetEquity')}
         </label>
         <select
           className="control-select"
@@ -39,39 +38,23 @@ export default function Controls({
         </select>
       </div>
 
-      {/* Date Selector with Today / Latest Button */}
+      {/* Date Selector */}
       <div className="control-item">
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <label className="control-label">
-            <Calendar size={12} style={{ display: 'inline', marginRight: '4px' }} />
-            Inspection Date
-          </label>
-          <button
-            type="button"
-            onClick={onSetLatestDate}
-            style={{
-              background: isLatest ? 'rgba(16, 185, 129, 0.2)' : 'rgba(56, 189, 248, 0.15)',
-              border: `1px solid ${isLatest ? '#10b981' : '#38bdf8'}`,
-              color: isLatest ? '#34d399' : '#38bdf8',
-              borderRadius: '4px',
-              padding: '0.15rem 0.45rem',
-              fontSize: '0.68rem',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '2px',
-              fontFamily: 'var(--font-mono)'
-            }}
-            title="Jump to the most recent trading day available"
-          >
-            <Zap size={10} />
-            <span>{isLatest ? 'Today / Latest' : 'Set to Latest'}</span>
-          </button>
-        </div>
+        <label className="control-label">
+          <Calendar size={12} style={{ display: 'inline', marginInlineEnd: '4px' }} />
+          {t('inspectionDate')}
+        </label>
         <input
           type="date"
           className="control-input"
           value={selectedDate}
+          onClick={(e) => {
+            try {
+              e.currentTarget.showPicker();
+            } catch (err) {
+              // Browser fallback
+            }
+          }}
           onChange={(e) => setSelectedDate(e.target.value)}
         />
       </div>
@@ -79,23 +62,23 @@ export default function Controls({
       {/* Model Focus */}
       <div className="control-item">
         <label className="control-label">
-          <Cpu size={12} style={{ display: 'inline', marginRight: '4px' }} />
-          Quantitative Model Focus
+          <Cpu size={12} style={{ display: 'inline', marginInlineEnd: '4px' }} />
+          {t('modelFocus')}
         </label>
         <select
           className="control-select"
           value={selectedModel}
           onChange={(e) => setSelectedModel(e.target.value)}
         >
-          <option value="Consensus">Tri-Expert Consensus (Tiered Strategy 🏛️)</option>
-          <option value="Conservative">Conservative (Capital Preserver - XGBoost w=5.0)</option>
-          <option value="Balanced">Balanced (LightGBM Alpha Booster w=3.0)</option>
-          <option value="Aggressive">Aggressive (Momentum Hunter - XGBoost w=1.0)</option>
+          <option value="Consensus">{t('modelConsensus')}</option>
+          <option value="Conservative">{t('modelConservative')}</option>
+          <option value="Balanced">{t('modelBalanced')}</option>
+          <option value="Aggressive">{t('modelAggressive')}</option>
         </select>
       </div>
 
       {/* Buttons Group */}
-      <div style={{ display: 'flex', gap: '0.5rem', alignSelf: 'flex-end' }}>
+      <div className="controls-buttons-group">
         {/* Live Refresh Button */}
         <button
           type="button"
@@ -116,10 +99,10 @@ export default function Controls({
             height: '42px',
             transition: 'all 0.2s'
           }}
-          title="Fetch latest real-time prices directly from Yahoo Finance"
+          title={t('liveFetchTitle')}
         >
           <RefreshCw size={14} className={refreshing ? 'spin-icon' : ''} />
-          <span>{refreshing ? 'Fetching...' : 'Live Fetch'}</span>
+          <span>{refreshing ? t('fetching') : t('liveFetch')}</span>
         </button>
 
         {/* Audit Trigger */}
@@ -129,7 +112,7 @@ export default function Controls({
           disabled={loading || refreshing}
         >
           <Play size={15} fill="currentColor" />
-          <span>{loading ? 'Auditing Engine...' : 'Run Audit'}</span>
+          <span>{loading ? t('auditingEngine') : t('runAudit')}</span>
         </button>
       </div>
     </div>

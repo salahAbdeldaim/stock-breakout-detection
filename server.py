@@ -1,17 +1,29 @@
 import os
 import json
+import re
+import difflib
+import datetime
 import pandas as pd
 import numpy as np
-from fastapi import FastAPI, HTTPException, Query
+from dotenv import load_dotenv
+load_dotenv()
+from groq import Groq
+
+from fastapi import FastAPI, HTTPException, Query, UploadFile, File
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 
 from stock_analyzer import MultiExpertSystem, LOOKBACK, BREAKOUT_PCT, CLOSE_NEAR_HIGH, VOLUME_MULTIPLIER
 
+# Groq Client Initialization
+GROQ_KEY = os.getenv("GROQ_API_KEY", "")
+groq_client = Groq(api_key=GROQ_KEY) if GROQ_KEY else None
+
 app = FastAPI(
-    title="QuantBreakout AI Engine",
-    description="Multi-Expert Breakout & Bull Trap Quantitative Detection API",
+    title="StockPred AI Engine",
+    description="Multi-Expert Breakout & Bull Trap Quantitative Detection API - Team Stockbrokers",
     version="2.0.0"
 )
 
@@ -23,6 +35,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount presentation slides
+if os.path.exists("presentation"):
+    app.mount("/presentation", StaticFiles(directory="presentation", html=True), name="presentation")
 
 # 50 Equities Metadata
 STOCK_METADATA = {
@@ -78,24 +94,107 @@ STOCK_METADATA = {
     "XOM": {"name": "Exxon Mobil", "sector": "Energy"}
 }
 
+# Mapping of common company names, Arabic transliterations, and frequent typos
+STOCK_ALIASES = {
+    "NVDA": ["nvidia", "انفيديا", "إنفيديا", "نيفيديا", "انفديا", "نيفديا", "انڤيديا", "انفدياا", "nvdia", "nvda"],
+    "AAPL": ["apple", "آبل", "ابل", "أبل", "ابلل", "تفاحة", "aple", "aapl"],
+    "TSLA": ["tesla", "تسلا", "تيسلا", "تيسلاا", "تيزلا", "telsa", "tsla"],
+    "MSFT": ["microsoft", "مايكروسوفت", "ميكروسوفت", "مايكرو", "msft"],
+    "AMZN": ["amazon", "أمازون", "امازون", "امزون", "amzn"],
+    "GOOGL": ["google", "alphabet", "جوجل", "غوغل", "الفابت", "ألفابت", "googl", "goog"],
+    "META": ["meta", "facebook", "ميتا", "فيسبوك", "فيس", "meta"],
+    "AMD": ["amd", "اي ام دي", "إي إم دي", "رايزن"],
+    "INTC": ["intel", "إنتل", "انتل", "intc"],
+    "BA": ["boeing", "بوينج", "بوينغ", "ba"],
+    "KO": ["coca-cola", "coca", "coke", "كوكاكولا", "كوكا كولا", "كولا", "ko"],
+    "MCD": ["mcdonalds", "ماكدونالدز", "ماك", "mcd"],
+    "DIS": ["disney", "ديزني", "dis"],
+    "JPM": ["jpmorgan", "jp morgan", "جي بي مورجان", "مورجان", "jpm"],
+    "CMCSA": ["comcast", "كومكاست", "كوم كاست", "cmcsa"],
+    "WMT": ["walmart", "والمارت", "ولمارت", "wmt"],
+    "NFLX": ["netflix", "نتفلكس", "نتفليكس", "nflx"],
+    "ADBE": ["adobe", "ادوبي", "أدوبي", "adbe"],
+    "CRM": ["salesforce", "سيلزفورس", "crm"],
+    "CSCO": ["cisco", "سيسكو", "csco"],
+    "QCOM": ["qualcomm", "كوالكوم", "qcom"],
+    "PFE": ["pfizer", "فايزر", "pfe"],
+    "CAT": ["caterpillar", "كاتربيلر", "كاتر بيلر", "cat"],
+    "ORCL": ["oracle", "اوراكل", "أوراكل", "orcl"],
+    "NKE": ["nike", "نايكي", "نايك", "nke"],
+    "PEP": ["pepsi", "pepsico", "بيبسي", "pep"],
+    "CVX": ["chevron", "شيفرون", "cvx"],
+    "XOM": ["exxon", "exxonmobil", "اكسون", "إكسون", "xom"],
+    "BAC": ["bank of america", "بنك اوف امريكا", "bac"],
+    "GS": ["goldman sachs", "جولدمان ساكس", "gs"],
+    "V": ["visa", "فيزا"],
+    "MA": ["mastercard", "ماستركارد", "ma"]
+}
+
+def resolve_ticker_fuzzy(text: str, default: Optional[str] = None) -> Optional[str]:
+    """Smart fuzzy ticker matcher handling Arabic phonetics, English names, and typos."""
+    if not text:
+        return default
+    text_clean = text.lower()
+    text_norm = re.sub(r"[أإآ]", "ا", text_clean)
+    text_norm = re.sub(r"ة", "ه", text_norm)
+    text_norm = re.sub(r"ى", "ي", text_norm)
+    words = re.findall(r"\b\w+\b", text_norm)
+
+    # 1. Exact match with ticker in words
+    for w in words:
+        upper_w = w.upper()
+        if upper_w in STOCK_METADATA:
+            return upper_w
+
+    # 2. Check predefined aliases (exact word or clean substring)
+    for ticker, aliases in STOCK_ALIASES.items():
+        for alias in aliases:
+            a_norm = re.sub(r"[أإآ]", "ا", alias.lower())
+            a_norm = re.sub(r"ة", "ه", a_norm)
+            a_norm = re.sub(r"ى", "ي", a_norm)
+            if len(a_norm) >= 3 and (a_norm in words or a_norm in text_norm):
+                return ticker
+
+    # 3. Fuzzy matching via difflib against alias map
+    all_alias_map = {}
+    for ticker, aliases in STOCK_ALIASES.items():
+        for a in aliases:
+            a_norm = re.sub(r"[أإآ]", "ا", a.lower())
+            all_alias_map[a_norm] = ticker
+
+    for w in words:
+        if len(w) >= 3:
+            matches = difflib.get_close_matches(w, list(all_alias_map.keys()), n=1, cutoff=0.72)
+            if matches:
+                return all_alias_map[matches[0]]
+
+    return default
+
 # Singleton instance of the quantitative engine
 engine: Optional[MultiExpertSystem] = None
 
 @app.on_event("startup")
 def startup_event():
     global engine
-    print("[QuantBreakout] Initializing Multi-Expert Quantitative Engine...")
+    print("[StockPred] Initializing Multi-Expert Quantitative Engine (Team Stockbrokers)...")
     engine = MultiExpertSystem(dataset_path="data/unified_breakout_dataset.csv")
-    print("[QuantBreakout] Engine ready! All 3 experts loaded (Conservative, Balanced LightGBM, Aggressive).")
+    print("[StockPred] Engine ready! All 3 experts loaded (Conservative, Balanced LightGBM, Aggressive).")
 
 class AnalyzeRequest(BaseModel):
     ticker: str
     date: Optional[str] = None
     expert: Optional[str] = "Consensus"
 
+class CopilotChatRequest(BaseModel):
+    message: str
+    current_ticker: Optional[str] = None
+    current_date: Optional[str] = None
+    language: Optional[str] = "ar"
+    conversation_summary: Optional[str] = None
+
 @app.get("/api/health")
 def health_check():
-    return {"status": "online", "system": "QuantBreakout AI Engine", "version": "2.0.0"}
+    return {"status": "online", "system": "StockPred AI Engine", "team": "Stockbrokers", "version": "2.0.0"}
 
 @app.get("/api/stocks")
 def get_stocks():
@@ -146,7 +245,11 @@ def get_stocks():
     return results
 
 @app.get("/api/chart/{ticker}")
-def get_chart_data(ticker: str, limit: int = Query(default=160, ge=30, le=500)):
+def get_chart_data(
+    ticker: str,
+    limit: int = Query(default=160, ge=30, le=500),
+    target_date: Optional[str] = Query(default=None)
+):
     """Returns historical candlestick data, 30d resistance overlay, and breakout indicators."""
     filepath = f"stock_data/{ticker.upper()}.csv"
     if not os.path.exists(filepath):
@@ -169,8 +272,27 @@ def get_chart_data(ticker: str, limit: int = Query(default=160, ge=30, le=500)):
         (df["Vol_Ratio"] >= VOLUME_MULTIPLIER)
     )
     
-    # Slice recent candles
-    recent_df = df.tail(limit).copy()
+    # Slice candles: if target_date is provided, center window around it
+    actual_target_date = None
+    if target_date:
+        try:
+            target_dt = pd.to_datetime(target_date)
+            exact_match = df[df["Date"] == target_dt]
+            if not exact_match.empty:
+                t_idx = exact_match.index[0]
+            else:
+                priors = df[df["Date"] <= target_dt]
+                t_idx = priors.index[-1] if not priors.empty else (len(df) - 1)
+            
+            actual_target_date = df.loc[t_idx, "Date"].strftime("%Y-%m-%d")
+            # Show 95 candles before target_date (consolidation/resistance) + 35 candles after
+            start_idx = max(0, t_idx - 95)
+            end_idx = min(len(df), t_idx + 36)
+            recent_df = df.iloc[start_idx:end_idx].copy()
+        except Exception:
+            recent_df = df.tail(limit).copy()
+    else:
+        recent_df = df.tail(limit).copy()
     
     candles = []
     for _, row in recent_df.iterrows():
@@ -196,6 +318,7 @@ def get_chart_data(ticker: str, limit: int = Query(default=160, ge=30, le=500)):
         "ticker": ticker.upper(),
         "name": meta["name"],
         "sector": meta["sector"],
+        "target_date": actual_target_date,
         "candles": candles
     }
 
@@ -209,9 +332,13 @@ def sanitize_for_json(obj):
     elif isinstance(obj, (np.integer, int)):
         return int(obj)
     elif isinstance(obj, (np.floating, float)):
+        if np.isnan(obj) or np.isinf(obj):
+            return None
         return float(obj)
     elif isinstance(obj, np.ndarray):
-        return obj.tolist()
+        return [sanitize_for_json(v) for v in obj.tolist()]
+    elif pd.isna(obj):
+        return None
     return obj
 
 @app.post("/api/analyze")
@@ -245,25 +372,62 @@ def refresh_live_data(ticker: str):
             
         df_new = df_new.reset_index()
         df_new["Date"] = pd.to_datetime(df_new["Date"]).dt.strftime("%Y-%m-%d")
+        
+        # If the latest day's candle in history is unclosed (has NaN Close), recover it from fast_info
+        last_idx = df_new.index[-1]
+        if pd.isna(df_new.loc[last_idx, "Close"]):
+            live_price = getattr(t.fast_info, "last_price", None)
+            if live_price is not None and not pd.isna(live_price):
+                df_new.loc[last_idx, "Close"] = live_price
+                df_new.loc[last_idx, "Open"] = getattr(t.fast_info, "open", live_price)
+                df_new.loc[last_idx, "High"] = getattr(t.fast_info, "day_high", live_price)
+                df_new.loc[last_idx, "Low"] = getattr(t.fast_info, "day_low", live_price)
+                df_new.loc[last_idx, "Volume"] = getattr(t.fast_info, "last_volume", 0)
+
+        # Check if the New York trading date is ahead of the history tail
+        try:
+            ny_today = datetime.datetime.now(datetime.timezone.utc).astimezone(
+                datetime.timezone(datetime.timedelta(hours=-4))
+            ).strftime('%Y-%m-%d')
+            latest_history_date = df_new.iloc[-1]["Date"]
+            live_price = getattr(t.fast_info, "last_price", None)
+            if ny_today > latest_history_date and live_price is not None and not pd.isna(live_price):
+                new_row = pd.DataFrame([{
+                    "Date": ny_today,
+                    "Close": live_price,
+                    "Open": getattr(t.fast_info, "open", live_price),
+                    "High": getattr(t.fast_info, "day_high", live_price),
+                    "Low": getattr(t.fast_info, "day_low", live_price),
+                    "Volume": getattr(t.fast_info, "last_volume", 0)
+                }])
+                df_new = pd.concat([df_new, new_row], ignore_index=True)
+        except Exception as e:
+            print(f"NY date check note: {e}")
+
         cols = ["Date", "Close", "High", "Low", "Open", "Volume"]
-        df_new = df_new[cols]
+        df_new = df_new.dropna(subset=["Close", "High", "Low", "Open"])[cols]
+        if df_new.empty:
+            raise HTTPException(status_code=400, detail=f"No complete trading candles returned for {ticker}.")
         
         df_old = pd.read_csv(filepath)
         df_old["Date"] = pd.to_datetime(df_old["Date"]).dt.strftime("%Y-%m-%d")
+        df_old = df_old.dropna(subset=["Close", "High", "Low", "Open"])
         
         combined = pd.concat([df_old[cols], df_new], ignore_index=True)
+        combined = combined.dropna(subset=["Close", "High", "Low", "Open"])
         combined = combined.drop_duplicates(subset=["Date"], keep="last").sort_values("Date").reset_index(drop=True)
         combined.to_csv(filepath, index=False)
         
         latest_date = combined.iloc[-1]["Date"]
-        latest_price = round(float(combined.iloc[-1]["Close"]), 2)
-        return {
+        latest_close = combined.iloc[-1]["Close"]
+        latest_price = round(float(latest_close), 2) if pd.notnull(latest_close) else 0.0
+        return sanitize_for_json({
             "status": "success",
             "ticker": ticker.upper(),
             "latest_date": latest_date,
             "latest_price": latest_price,
             "message": f"Successfully updated live market data for {ticker.upper()} up to {latest_date}."
-        }
+        })
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Live fetch error: {str(e)}")
 
@@ -275,7 +439,7 @@ def get_presets():
             "id": "nvda_tier1",
             "ticker": "NVDA",
             "date": "2024-06-05",
-            "title": "NVDA Institutional Breakout (Tier 1 Consensus 🟢)",
+            "title": "NVDA Institutional Breakout (Tier 1 Consensus)",
             "description": "Massive post-consolidation clearance above resistance. Unanimous institutional approval (3/3 Experts, 100% Full Allocation).",
             "expected_state": "BREAKOUT_CANDIDATE_DETECTED",
             "expected_tier": "TIER 1"
@@ -284,7 +448,7 @@ def get_presets():
             "id": "nvda_tier2",
             "ticker": "NVDA",
             "date": "2026-05-14",
-            "title": "NVDA Speculative Momentum (Tier 2 Half-Size 🟡)",
+            "title": "NVDA Speculative Momentum (Tier 2 Half-Size)",
             "description": "Momentum Hunter approved, but Conservative model flagged doubt. Half-size allocation (50%) + tight stop (-2.50%).",
             "expected_state": "BREAKOUT_CANDIDATE_DETECTED",
             "expected_tier": "TIER 2"
@@ -293,7 +457,7 @@ def get_presets():
             "id": "cmcsa_tier3",
             "ticker": "CMCSA",
             "date": "2019-03-15",
-            "title": "CMCSA Classic Bull Trap (Tier 3 Trap Alert 🔴)",
+            "title": "CMCSA Classic Bull Trap (Tier 3 Trap Alert)",
             "description": "Price pierced resistance but formed large upper wick. Unanimous rejection (0/3 Approved); capital completely preserved!",
             "expected_state": "BREAKOUT_CANDIDATE_DETECTED",
             "expected_tier": "TIER 3"
@@ -302,12 +466,304 @@ def get_presets():
             "id": "tsla_consolidation",
             "ticker": "TSLA",
             "date": "2024-04-15",
-            "title": "TSLA Rangebound Consolidation (Stable State ⚪)",
+            "title": "TSLA Rangebound Consolidation (Stable State)",
             "description": "Asset trading within baseline boundaries below resistance. Demonstrates stage 1 screener avoiding unnecessary model evaluation.",
             "expected_state": "STABLE_CONSOLIDATION",
             "expected_tier": "NONE"
         }
     ]
+
+@app.post("/api/copilot/transcribe")
+async def copilot_transcribe(file: UploadFile = File(...)):
+    """Transcribes user voice recording to text using Groq Whisper Large v3 Turbo."""
+    if not groq_client:
+        raise HTTPException(status_code=500, detail="Groq API key not configured on server.")
+    try:
+        contents = await file.read()
+        filename = file.filename or "recording.webm"
+        content_type = file.content_type or "audio/webm"
+        
+        transcription = groq_client.audio.transcriptions.create(
+            model="whisper-large-v3-turbo",
+            file=(filename, contents, content_type),
+            response_format="text"
+        )
+        text_res = transcription.strip() if isinstance(transcription, str) else transcription.text.strip()
+        return {"text": text_res}
+    except Exception as e:
+        print(f"Transcription error: {e}")
+        raise HTTPException(status_code=500, detail=f"Voice transcription failed: {str(e)}")
+
+@app.post("/api/copilot/chat")
+def copilot_chat(req: CopilotChatRequest):
+    """StockPred AI Copilot: Natural language intent parsing, quantitative audit execution, and analyst synthesis."""
+    global engine
+    if engine is None:
+        engine = MultiExpertSystem(dataset_path="data/unified_breakout_dataset.csv")
+
+    if not groq_client:
+        raise HTTPException(status_code=500, detail="Groq API key not configured on server.")
+
+    user_msg = req.message.strip()
+    if not user_msg:
+        raise HTTPException(status_code=400, detail="Empty query provided.")
+
+    lang = req.language if req.language in ["ar", "en"] else "ar"
+    available_tickers = list(STOCK_METADATA.keys())
+
+    # Step 1: Structured Intent, Scope & Entity Parsing with Typo Tolerance & Conversation Memory
+    intent_system_prompt = f"""You are the intelligent intent, scope & entity classifier for StockPred (developed by Team Stockbrokers).
+Available stock tickers (50 US Equities): {', '.join(available_tickers[:35])}, etc.
+Common company name mappings & aliases:
+- NVDA: NVIDIA, إنفيديا, انفيديا, نيفيديا, نيفديا, انڤيديا, nvdia
+- AAPL: Apple, آبل, ابل, أبل, تفاحة, aple
+- TSLA: Tesla, تسلا, تيسلا, تيزلا, telsa
+- MSFT: Microsoft, مايكروسوفت, ميكروسوفت, مايكرو
+- AMZN: Amazon, أمازون, امازون
+- GOOGL: Google, Alphabet, جوجل, غوغل, الفابت
+- META: Meta, Facebook, ميتا, فيسبوك
+- AMD: Advanced Micro Devices, اي ام دي, رايزن
+- INTC: Intel, إنتل, انتل
+- BA: Boeing, بوينج, بوينغ
+- KO: Coca-Cola, كوكاكولا, كوكا كولا
+- MCD: McDonald's, ماكدونالدز
+- DIS: Disney, ديزني
+- JPM: JPMorgan Chase, جي بي مورجان, مورجان
+- CMCSA: Comcast, كومكاست
+- WMT: Walmart, والمارت, ولمارت
+- NFLX: Netflix, نتفلكس, نتفليكس
+- ADBE: Adobe, ادوبي
+- CRM: Salesforce, سيلزفورس
+- CSCO: Cisco, سيسكو
+- QCOM: Qualcomm, كوالكوم
+- PFE: Pfizer, فايزر
+- CAT: Caterpillar, كاتربيلر
+
+Current dashboard context:
+- current_ticker: {req.current_ticker or 'NVDA'}
+- current_date: {req.current_date or 'latest'}
+Session Conversation Memory Summary:
+{req.conversation_summary or 'No prior discussion in this session.'}
+
+DOMAIN SCOPE DEFINITION:
+- IN-SCOPE (is_in_scope: true):
+  1. Stock market analysis, equity breakouts, bull traps / fakeouts, consolidation screening.
+  2. Technical & quantitative indicators: Resistance, ATR, ATR_Pct, Volume Surge, RSI, MA Distance (MA10, MA30), Close Position, Squeeze Tightness, Momentum.
+  3. StockPred platform features: Tri-Expert Committee (Conservative, Balanced, Aggressive), Tiered execution strategies (Tier 1, Tier 2, Tier 3), TreeSHAP factors of confidence vs doubt.
+  4. General questions about the StockPred assistant's identity ("who are you", "من أنت", "ماذا تفعل", "كيف تساعدني").
+  5. Any supported US equities and comparative setup questions.
+
+- OUT-OF-SCOPE (is_in_scope: false):
+  Any general topic completely unrelated to stock trading, finance, or StockPred. Examples: cooking/recipes, sports, weather, politics, gaming, jokes, general academic homework, translation of non-financial text, non-financial coding, medical/legal advice, casual non-financial chitchat, etc.
+
+CRITICAL RULES:
+- Be extremely tolerant of spelling mistakes, typos, colloquial Arabic, and English misspellings (e.g. 'انفديا'/'نيفديا' -> NVDA, 'ابلل'/'aple' -> AAPL, 'تيسلاا' -> TSLA, 'ميكرسوفت' -> MSFT, 'كومكاست' -> CMCSA).
+- If the user asks a follow-up referring to the previously discussed stock (e.g. "والتاريخ اللي قبله؟", "قارنه بيه", "ليه كان كده؟"), infer the ticker and date from the Conversation Memory.
+- Return ONLY a valid JSON object with:
+  "is_in_scope": boolean (true if query relates to stocks/trading/financial metrics/StockPred; false for general unrelated topics)
+  "intent": "audit" (inspecting a specific stock setup) | "domain_qa" (general financial/StockPred Q&A or assistant identity) | "out_of_scope" (general unrelated topic)
+  "ticker": string (uppercase ticker, e.g. "NVDA", or null if not asking about a specific stock)
+  "date": string in "YYYY-MM-DD" format if mentioned, or "latest", or null
+
+DO NOT output markdown code blocks. Output raw JSON only."""
+
+    parsed = {"is_in_scope": True, "ticker": req.current_ticker or "NVDA", "date": req.current_date or "latest", "intent": "audit"}
+    try:
+        intent_res = groq_client.chat.completions.create(
+            model="qwen/qwen3.8-27b",
+            messages=[
+                {"role": "system", "content": intent_system_prompt},
+                {"role": "user", "content": user_msg}
+            ],
+            temperature=0.0,
+            max_tokens=120
+        )
+        intent_raw = intent_res.choices[0].message.content.strip()
+        if "```" in intent_raw:
+            intent_raw = intent_raw.split("```")[1]
+            if intent_raw.startswith("json"):
+                intent_raw = intent_raw[4:]
+            intent_raw = intent_raw.strip()
+        parsed = json.loads(intent_raw)
+    except Exception as e:
+        print(f"Intent parse fallback: {e}")
+
+    is_in_scope = parsed.get("is_in_scope", True)
+    intent = parsed.get("intent", "audit")
+
+    # If the question is outside domain / general topic -> Politely decline immediately!
+    if not is_in_scope or intent == "out_of_scope":
+        refusal_msg = (
+            "عذراً، أنا مساعد مالي كمي مخصص لمنصة StockPred فقط. يقتصر نطاق اختصاصي ومعلوماتي على تحليل واكتشاف اختراقات الأسهم (Breakouts)، كشف مخاطر فخاخ الثيران (Bull Traps / Fakeouts)، وتدقيق المؤشرات الفنية والكمية للأسهم المتاحة في المنصة.\n\nلا يمكنني الإجابة عن مواضيع عامة خارج نطاق التحليل المالي الخاص بالمنصة. يمكنك سؤالي عن أي سهم متاح (مثل NVDA، AAPL، TSLA) أو الاستفسار عن مؤشرات النموذج واستراتيجية التداول."
+            if lang == "ar"
+            else "I apologize, but I am a dedicated quantitative financial assistant specifically built for the StockPred platform. My scope and knowledge are strictly restricted to equity breakout detection, bull trap (fakeout) risk analysis, and technical indicator evaluations for supported stocks.\n\nI cannot answer general or off-topic questions outside this financial domain. Feel free to ask about any supported stock ticker (such as NVDA, AAPL, TSLA), technical metrics, or platform models."
+        )
+        return {
+            "reply": refusal_msg,
+            "action": None,
+            "parsed": parsed,
+            "conversation_summary": req.conversation_summary,
+            "audit_summary": None
+        }
+
+    lang_instruction = "Respond in fluent, professional institutional Arabic." if lang == "ar" else "Respond in fluent, professional institutional English."
+
+    # If domain Q&A without a specific ticker (e.g. explaining what is a bull trap, how models work, or assistant identity)
+    target_ticker_raw = parsed.get("ticker")
+    if intent == "domain_qa" and not target_ticker_raw:
+        fuzzy_match = resolve_ticker_fuzzy(user_msg)
+        if not fuzzy_match:
+            qa_prompt = f"""You are the Senior Quantitative Financial Analyst for StockPred (developed by Team Stockbrokers).
+{lang_instruction}
+Scope: You answer questions strictly related to the StockPred platform, quantitative breakout detection, bull trap mechanics, technical indicators (ATR, RSI, MA, Volume Surge, Squeeze), the Tri-Expert ensemble (Conservative, Balanced, Aggressive), and your role as an AI analyst.
+If the user asks about anything outside this domain, politely decline.
+STRICT RULE: DO NOT USE ANY EMOJIS WHATSOEVER. Keep the tone professional, institutional, and objective.
+
+Return a valid JSON object with:
+- "reply": string (the institutional financial explanation in the requested language, without any emojis)
+- "new_conversation_summary": string (1-2 sentences in English updating the session conversation memory summary)"""
+
+            try:
+                qa_res = groq_client.chat.completions.create(
+                    model="qwen/qwen3.8-27b",
+                    messages=[
+                        {"role": "system", "content": qa_prompt},
+                        {"role": "user", "content": f"User Query: {user_msg}\nSession Memory: {req.conversation_summary or 'None.'}"}
+                    ],
+                    temperature=0.2,
+                    response_format={"type": "json_object"},
+                    max_tokens=500
+                )
+                qa_data = json.loads(qa_res.choices[0].message.content.strip())
+                return {
+                    "reply": qa_data.get("reply", ""),
+                    "action": None,
+                    "parsed": parsed,
+                    "conversation_summary": qa_data.get("new_conversation_summary", req.conversation_summary or "Discussed platform concepts."),
+                    "audit_summary": None
+                }
+            except Exception as e:
+                print(f"Domain QA fallback: {e}")
+
+    # Fallback to smart fuzzy ticker resolver if LLM returned unknown or null ticker
+    target_ticker = target_ticker_raw
+    if not target_ticker or target_ticker.upper() not in STOCK_METADATA:
+        fuzzy_match = resolve_ticker_fuzzy(user_msg)
+        if fuzzy_match:
+            target_ticker = fuzzy_match
+        else:
+            target_ticker = req.current_ticker or "NVDA"
+    target_ticker = target_ticker.upper()
+
+    # Resolve date
+    target_date = parsed.get("date")
+    all_stocks = get_stocks()
+    stock_meta = next((s for s in all_stocks if s["ticker"] == target_ticker), None)
+    latest_avail = stock_meta["end_date"] if stock_meta and stock_meta["end_date"] else "2024-06-05"
+
+    if not target_date or target_date == "latest":
+        target_date = latest_avail
+
+    # Step 2: Execute Multi-Expert Quantitative Audit
+    audit_data = None
+    audit_err = None
+    try:
+        audit_data = engine.analyze(target_ticker, date=target_date)
+        if "error" in audit_data:
+            audit_err = audit_data["error"]
+            audit_data = None
+    except Exception as e:
+        audit_err = str(e)
+
+    # Step 3: Synthesis with LLM and Rolling Memory Summary
+    if audit_data:
+        actual_date = audit_data.get("Date", target_date)
+        summary_context = {
+            "Ticker": target_ticker,
+            "Name": STOCK_METADATA.get(target_ticker, {}).get("name", target_ticker),
+            "Sector": STOCK_METADATA.get(target_ticker, {}).get("sector", "Equities"),
+            "Date": actual_date,
+            "Close": audit_data.get("Close"),
+            "Resistance_30d": audit_data.get("Resistance_30d"),
+            "Volume_Ratio": audit_data.get("Volume_Ratio"),
+            "Close_Position": audit_data.get("Close_Position"),
+            "Is_Breakout_Candidate": audit_data.get("Is_Breakout_Candidate"),
+            "Status": audit_data.get("Status"),
+            "Consensus": audit_data.get("Consensus"),
+            "Experts": {
+                k: {
+                    "Decision": v.get("Decision"),
+                    "Probability": v.get("Probability"),
+                    "Top_Drivers": v.get("SHAP_Explanation", {}).get("Top_Drivers", [])[:3]
+                }
+                for k, v in audit_data.get("Experts", {}).items()
+            }
+        }
+    else:
+        summary_context = {
+            "Ticker": target_ticker,
+            "Date": target_date,
+            "Error": audit_err or "Historical date not present in dataset"
+        }
+
+    lang_instruction = "Respond in fluent, professional institutional Arabic." if lang == "ar" else "Respond in fluent, professional institutional English."
+    
+    synth_system_prompt = f"""You are the Senior Quantitative Financial Analyst for StockPred (developed by Team Stockbrokers).
+{lang_instruction}
+Session Conversation Memory: {req.conversation_summary or 'None.'}
+
+Explain the quantitative audit result strictly and factually based on the provided audit data.
+GUIDELINES:
+- Clearly state the status and consensus decision (e.g. TIER 1 High-Conviction Breakout, TIER 2 Speculative, TIER 3 Bull Trap / Fakeout, or Stable Consolidation).
+- Cite specific metrics (Close price, 30d Resistance, Volume Ratio, and Close Position).
+- Explain the key TreeSHAP feature drivers that influenced the models' conclusion.
+- State actionable risk management / position sizing if applicable.
+- If the user query is a follow-up or comparative question, smoothly integrate context from Session Conversation Memory.
+- STRICT RULE: DO NOT USE ANY EMOJIS WHATSOEVER. Keep the tone professional, institutional, and objective.
+- Use clean formatting with concise bullet points.
+
+Return a valid JSON object with:
+- "reply": string (the complete financial explanation in the requested language, without any emojis)
+- "new_conversation_summary": string (1-2 sentences in English updating the session conversation memory summary for subsequent turns)"""
+
+    new_summary = req.conversation_summary or f"Audited {target_ticker} on {target_date}."
+    try:
+        synth_res = groq_client.chat.completions.create(
+            model="qwen/qwen3.8-27b",
+            messages=[
+                {"role": "system", "content": synth_system_prompt},
+                {"role": "user", "content": f"User Query: {user_msg}\n\nQuantitative Audit Data:\n{json.dumps(sanitize_for_json(summary_context), ensure_ascii=False)}"}
+            ],
+            temperature=0.2,
+            response_format={"type": "json_object"},
+            max_tokens=550
+        )
+        synth_data = json.loads(synth_res.choices[0].message.content.strip())
+        reply_text = synth_data.get("reply", "")
+        new_summary = synth_data.get("new_conversation_summary", new_summary)
+    except Exception as e:
+        print(f"Synthesis fallback: {e}")
+        reply_text = (
+            f"تم تدقيق سهم {target_ticker} بتاريخ {target_date}. القرار: {audit_data.get('Consensus', {}).get('Tier', 'N/A') if audit_data else 'غير متاح'}."
+            if lang == "ar"
+            else f"Audited {target_ticker} on {target_date}. Decision: {audit_data.get('Consensus', {}).get('Tier', 'N/A') if audit_data else 'N/A'}."
+        )
+
+    action_payload = None
+    if target_ticker and target_date:
+        action_payload = {
+            "type": "SET_INSPECTION",
+            "ticker": target_ticker,
+            "date": actual_date if audit_data else target_date
+        }
+
+    return {
+        "reply": reply_text,
+        "action": action_payload,
+        "parsed": parsed,
+        "conversation_summary": new_summary,
+        "audit_summary": sanitize_for_json(summary_context) if audit_data else None
+    }
 
 if __name__ == "__main__":
     import uvicorn

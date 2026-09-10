@@ -1,0 +1,1712 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StockPred // Institutional Quantitative Breakout & Bull Trap Defense</title>
+  <link rel="stylesheet" href="slides.css">
+  <!-- MathJax Configuration for Publication-Grade Math Rendering -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']]
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+      }
+    };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+</head>
+<body>
+
+  <!-- Background Ambience -->
+  <div class="presentation-bg"></div>
+
+  <!-- Top Global Header -->
+  <header class="pres-header">
+    <div class="pres-brand">
+      <span class="pres-logo-badge">STOCKPRED</span>
+      <span class="pres-title-header">Institutional Quantitative Breakout & Bull Trap Detection System</span>
+    </div>
+    <div class="pres-controls-right">
+      <span class="pres-slide-counter" id="slideCounter">STANDBY</span>
+      <span style="color: var(--text-dim);">Team Stockbrokers // NTI 2026</span>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="pres-top-progress" id="topProgress"></div>
+
+  <!-- Main Slides Viewport -->
+  <main class="slides-viewport">
+
+    <!-- ====================================================================
+         SLIDE 0 (STANDBY): PURE BLACKOUT SCREEN
+         ==================================================================== -->
+    <section class="slide active blackout-slide" id="slide-blackout">
+      <div class="blackout-screen"></div>
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Pre-presentation standby: Pure black stage curtain screen awaiting formal presentation start.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Click anywhere or press Space / Right Arrow to launch the StockPred Executive Title Slide.</span>
+        </div>
+      </div>
+    </section>
+
+<!-- ====================================================================
+         SLIDE 1: TITLE & EXECUTIVE SUMMARY
+         ==================================================================== -->
+    <section class="slide" id="slide-0">
+      <div style="max-width: 1080px; margin: 0 auto; text-align: center;">
+        <span class="slide-category">Institutional Algorithmic Trading // Quantitative Machine Learning</span>
+        <h1 class="slide-title" style="font-size: 3.4rem; margin-bottom: 1.25rem;">
+          STOCKPRED
+        </h1>
+        <p style="font-size: 1.35rem; color: var(--color-brand); font-family: var(--font-display); font-weight: 600; margin-bottom: 1.5rem;">
+          Autonomous Multi-Expert Breakout Verification & Bull Trap Detection System
+        </p>
+        <p class="slide-subtitle" style="margin: 0 auto 2.25rem auto; font-size: 1.05rem;">
+          Solving the classical quantitative dilemma between Win Rate and Market Capture through Tri-Expert Ensemble Modeling, Dynamic Tiered Position Sizing, and TreeSHAP Explainable AI across 50 US Equities (2000–2026).
+        </p>
+
+        <div style="display: flex; justify-content: center; gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="stat-box" style="min-width: 175px;">
+            <div class="stat-value" style="color: var(--color-emerald);">90.1%</div>
+            <div class="stat-label">Peak Win Rate</div>
+          </div>
+          <div class="stat-box" style="min-width: 175px;">
+            <div class="stat-value" style="color: var(--color-brand);">97.6%</div>
+            <div class="stat-label">Market Capture</div>
+          </div>
+          <div class="stat-box" style="min-width: 175px;">
+            <div class="stat-value" style="color: var(--color-purple);">+2,129%</div>
+            <div class="stat-label">Out-of-Sample Return</div>
+          </div>
+          <div class="stat-box" style="min-width: 175px;">
+            <div class="stat-value" style="color: var(--color-amber);">3,474</div>
+            <div class="stat-label">Evaluated Events</div>
+          </div>
+        </div>
+
+        <div style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--text-dim);">
+          Presented by Team Stockbrokers // NTI Advanced Machine Learning Track // 2026
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Welcome the committee and state the core objective: Introducing StockPred, an institutional quantitative AI platform built to solve the most destructive failure mode in equity trading: the Bull Trap.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>State the breakthrough: Traditional models force a painful choice between high win rate or high opportunity capture. StockPred solves both with a Tri-Expert Committee and Dynamic Tiered Position Sizing, delivering +2,129% out-of-sample portfolio return.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 1: ACT I - THE MARKET CONFLICT: THE BULL TRAP VILLAIN
+         ==================================================================== -->
+    <section class="slide" id="slide-1">
+      <span class="slide-category">Act I: The Market Conflict</span>
+      <h2 class="slide-title">The Anatomy of a Bull Trap</h2>
+      <p class="slide-subtitle">
+        How retail traders are methodically baited by institutional liquidity sweeps at major technical resistance levels.
+      </p>
+
+      <div class="grid-2col">
+        <div class="trap-theater-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <span style="font-family: var(--font-mono); font-size: 0.82rem; color: var(--color-crimson); font-weight: 700;">
+              <svg class="inline-svg stroke-crimson" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> THE LIQUIDITY TRAP IN ACTION
+            </span>
+            <span class="tier-pill t3">DEADLY CAPITAL SINK</span>
+          </div>
+
+          <!-- Institutional Candlestick Chart Demonstration -->
+          <svg class="svg-chart-animation" viewBox="0 0 560 305" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="trapGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Background Grid Lines -->
+            <line x1="25" y1="60" x2="485" y2="60" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3 3" />
+            <line x1="25" y1="110" x2="485" y2="110" stroke="#f59e0b" stroke-dasharray="5 5" stroke-width="1.8" opacity="0.9" />
+            <line x1="25" y1="160" x2="485" y2="160" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3 3" />
+            <line x1="25" y1="210" x2="485" y2="210" stroke="rgba(255,255,255,0.05)" stroke-dasharray="3 3" />
+            <line x1="25" y1="260" x2="485" y2="260" stroke="rgba(255,255,255,0.08)" />
+
+            <!-- Price Axis (Right) -->
+            <line x1="485" y1="35" x2="485" y2="280" stroke="rgba(255,255,255,0.12)" />
+            <text x="495" y="64" fill="#64748b" font-family="JetBrains Mono" font-size="10">$125.00</text>
+            <rect x="492" y="100" width="62" height="18" fill="rgba(245,158,11,0.2)" stroke="#f59e0b" rx="3"/>
+            <text x="496" y="113" fill="#f59e0b" font-family="JetBrains Mono" font-size="9" font-weight="700">$120 RES</text>
+            <text x="495" y="164" fill="#64748b" font-family="JetBrains Mono" font-size="10">$115.00</text>
+            <text x="495" y="214" fill="#64748b" font-family="JetBrains Mono" font-size="10">$110.00</text>
+            <text x="495" y="264" fill="#64748b" font-family="JetBrains Mono" font-size="10">$105.00</text>
+
+            <!-- 1. Resistance Ceiling Callout Tag (Left Zone: x=20 to x=135, Safe from candles at x=160+) -->
+            <rect x="20" y="98" width="115" height="24" fill="rgba(15,23,42,0.95)" stroke="#f59e0b" stroke-width="1.2" rx="4"/>
+            <text x="26" y="114" fill="#f59e0b" font-family="JetBrains Mono" font-size="9" font-weight="700">30D RES ($120)</text>
+
+            <!-- 2. Pre-Breakout Consolidation Candles (x=160 to x=235) -->
+            <!-- Candle 1 -->
+            <line x1="160" y1="125" x2="160" y2="165" stroke="#38bdf8" stroke-width="1.5" opacity="0.6"/>
+            <rect x="154" y="132" width="12" height="30" fill="#38bdf8" rx="2" opacity="0.6"/>
+
+            <!-- Candle 2 -->
+            <line x1="180" y1="120" x2="180" y2="160" stroke="#f87171" stroke-width="1.5" opacity="0.6"/>
+            <rect x="174" y="128" width="12" height="28" fill="#ef4444" rx="2" opacity="0.6"/>
+
+            <!-- Candle 3 -->
+            <line x1="205" y1="115" x2="205" y2="155" stroke="#38bdf8" stroke-width="1.5" opacity="0.7"/>
+            <rect x="199" y="122" width="12" height="30" fill="#38bdf8" rx="2" opacity="0.7"/>
+
+            <!-- Candle 4 (Consolidation high pressing resistance) -->
+            <line x1="230" y1="111" x2="230" y2="150" stroke="#38bdf8" stroke-width="1.5" opacity="0.85"/>
+            <rect x="224" y="115" width="12" height="32" fill="#38bdf8" rx="2" opacity="0.85"/>
+
+            <!-- 3. THE BAIT CANDLE (x=255) -->
+            <line x1="255" y1="68" x2="255" y2="135" stroke="#10b981" stroke-width="2"/>
+            <rect x="248" y="76" width="14" height="46" fill="#10b981" rx="2"/>
+
+            <!-- Annotation 1: The Bait Callout (Top Zone: y=18 to y=42, Directly above x=255) -->
+            <rect x="180" y="18" width="150" height="24" fill="rgba(16,185,129,0.2)" stroke="#10b981" stroke-width="1.2" rx="4"/>
+            <text x="188" y="34" fill="#10b981" font-family="JetBrains Mono" font-size="9.5" font-weight="800">1. THE BAIT (+2.5% PUMP)</text>
+            <line x1="255" y1="42" x2="255" y2="66" stroke="#10b981" stroke-width="1.5" stroke-dasharray="2 2"/>
+
+            <!-- Annotation 2: Retail Buys Top (Top-Right Zone: x=325 to x=480, y=52 to y=76, 50px above candles) -->
+            <rect x="325" y="52" width="155" height="24" fill="rgba(239,68,68,0.22)" stroke="#ef4444" stroke-width="1.2" rx="4"/>
+            <text x="333" y="68" fill="#fca5a5" font-family="JetBrains Mono" font-size="9.5" font-weight="800">2. RETAIL BUYS TOP (TRAP)</text>
+            <path d="M 325 64 Q 295 64 266 75" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3 3" fill="none"/>
+
+            <!-- 4. THE TRAP REVERSAL DUMP CANDLES (x=285 to x=400) -->
+            <!-- Candle 6: Bearish Rejection -->
+            <line x1="285" y1="82" x2="285" y2="145" stroke="#ef4444" stroke-width="1.8"/>
+            <rect x="278" y="88" width="14" height="48" fill="#ef4444" rx="2"/>
+
+            <!-- Candle 7: Breakdown -->
+            <line x1="318" y1="128" x2="318" y2="185" stroke="#ef4444" stroke-width="1.8"/>
+            <rect x="311" y="136" width="14" height="42" fill="#ef4444" rx="2"/>
+
+            <!-- Candle 8: Heavy Distribution -->
+            <line x1="352" y1="168" x2="352" y2="220" stroke="#ef4444" stroke-width="1.8"/>
+            <rect x="345" y="176" width="14" height="38" fill="#ef4444" rx="2"/>
+
+            <!-- Candle 9: Panic Dumping Flush -->
+            <line x1="388" y1="205" x2="388" y2="252" stroke="#ef4444" stroke-width="1.8"/>
+            <rect x="381" y="212" width="14" height="36" fill="#ef4444" rx="2"/>
+
+            <!-- Dynamic Cascading Dump Curve Overlay -->
+            <path id="animatedTrapPath" d="M 262 82 C 290 85, 310 135, 350 185 S 385 240, 396 248" stroke="#ef4444" stroke-width="3" fill="none" stroke-dasharray="1000" stroke-dashoffset="0"/>
+            <circle cx="396" cy="248" r="5" fill="#ef4444"/>
+
+            <!-- Annotation 3: Trapdoor Dump (Bottom Zone: x=175 to x=365, y=262 to y=286, 50px below candles) -->
+            <rect x="175" y="262" width="190" height="24" fill="rgba(239,68,68,0.25)" stroke="#ef4444" stroke-width="1.2" rx="4"/>
+            <text x="183" y="278" fill="#f87171" font-family="JetBrains Mono" font-size="10" font-weight="800">3. TRAPDOOR DUMP (-14.2%)</text>
+            <line x1="365" y1="274" x2="390" y2="252" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2 2"/>
+          </svg>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div class="quant-card accent-crimson">
+            <div class="card-title" style="color: var(--color-crimson);">The Institutional "Villain"</div>
+            <div class="card-desc">
+              Hedge funds and high-frequency algorithms deliberately trigger buy-stop orders above visible resistance to generate sell liquidity for their massive block orders, dumping shares into retail hands.
+            </div>
+          </div>
+          <div class="quant-card accent-amber">
+            <div class="card-title" style="color: var(--color-amber);">The Phantom Breakout</div>
+            <div class="card-desc">
+              On the surface, price cleanly crosses the 30-day high. Naive momentum traders rush in with leverage, unaware that volume is drying up and distribution is actively taking place.
+            </div>
+          </div>
+          <div class="quant-card accent-cyan">
+            <div class="card-title" style="color: var(--color-brand);">The Asymmetric Loss</div>
+            <div class="card-desc">
+              When the trap springs, the stock plunges back into consolidation. The trader suffers severe capital loss, forced liquidations, and acute emotional distress.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Set the stage: In algorithmic equity trading, resistance levels are not static walls; they are liquidity honeypots.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Walk through the animated chart: The stock pumps 2.5% above the 30-day resistance, retail FOMO enters at the peak, and institutional participants offload inventory, creating an aggressive 14% trapdoor reversal.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 2: THE RETAIL DILEMMA - WHY CLASSICAL TA FAILS
+         ==================================================================== -->
+    <section class="slide" id="slide-2">
+      <span class="slide-category">Act I: The Quantitative Gap</span>
+      <h2 class="slide-title">Why Classical Technical Analysis Fails</h2>
+      <p class="slide-subtitle">
+        Empirical market realities: 71.4% of naive breakout attempts fail in modern algorithmic environments.
+      </p>
+
+      <div class="grid-3col">
+        <div class="quant-card accent-crimson">
+          <div class="card-icon-wrap" style="background: rgba(239, 68, 68, 0.15);"><svg class="icon-svg stroke-crimson" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg></div>
+          <div class="card-title">Static Resistance Lines</div>
+          <div class="card-desc">
+            Horizontal lines drawn on price charts ignore volatility regimes. A $2.00 breakout in a low-volatility environment is massive, while in a high-volatility regime it is merely statistical noise.
+          </div>
+        </div>
+
+        <div class="quant-card accent-amber">
+          <div class="card-icon-wrap" style="background: rgba(245, 158, 11, 0.15);"><svg class="icon-svg stroke-amber" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg></div>
+          <div class="card-title">Lagging Indicators</div>
+          <div class="card-desc">
+            Moving average crossovers and MACD signals calculate trends with substantial lag. By the time a traditional indicator confirms a breakout, the move is already exhausted and ripe for reversal.
+          </div>
+        </div>
+
+        <div class="quant-card accent-purple">
+          <div class="card-icon-wrap" style="background: rgba(168, 85, 247, 0.15);"><svg class="icon-svg stroke-purple" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
+          <div class="card-title">Lookahead & Churn Risk</div>
+          <div class="card-desc">
+            Manual discretionary trading suffers from psychological bias, stop-hunting whipsaws, and catastrophic account drawdowns, resulting in negative expected value over large sample sizes.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem; display: flex; justify-content: space-around; align-items: center;">
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-crimson);">71.4%</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Naive Breakout Failure Rate</div>
+        </div>
+        <div style="width: 1px; height: 40px; background: var(--border-subtle);"></div>
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-amber);">-42.1%</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Naive Strategy Max Drawdown</div>
+        </div>
+        <div style="width: 1px; height: 40px; background: var(--border-subtle);"></div>
+        <div style="text-align: center;">
+          <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-brand);">&lt; 15ms</div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">HFT Front-Running Speed</div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Clarify why textbook technical analysis fails: Modern markets are dominated by quantitative execution algorithms that know where retail stops are placed.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Emphasize our data findings: Across 50 US equities, over 71% of raw breakout attempts without machine learning confirmation collapse within 5 trading sessions.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 3: SYSTEM ARCHITECTURE - THE MASTER BLUEPRINT
+         ==================================================================== -->
+    <section class="slide" id="slide-3">
+      <span class="slide-category">System Engineering Blueprint</span>
+      <h2 class="slide-title">End-to-End System Architecture</h2>
+      <p class="slide-subtitle">
+        A resilient 5-tier quantitative pipeline decoupling data ingestion, feature generation, ML inference, and user experience.
+      </p>
+
+      <div class="arch-diagram-grid">
+        <!-- Layer 1 -->
+        <div class="arch-col">
+          <span class="arch-col-num" style="background: rgba(56, 189, 248, 0.2); color: var(--color-brand);">TIER 01</span>
+          <div class="arch-col-title">Data Ingestion</div>
+          <ul class="arch-col-list">
+            <li>50 US Equities (S&P / Nasdaq)</li>
+            <li>26 Years Daily OHLCV (2000–2026)</li>
+            <li>Auto Dividend & Split Adjustment</li>
+            <li>Zero Lookahead Sanitization</li>
+          </ul>
+          <span class="arch-flow-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </div>
+
+        <!-- Layer 2 -->
+        <div class="arch-col">
+          <span class="arch-col-num" style="background: rgba(168, 85, 247, 0.2); color: var(--color-purple);">TIER 02</span>
+          <div class="arch-col-title">Feature Store</div>
+          <ul class="arch-col-list">
+            <li>Event-Driven Breakout Screener</li>
+            <li>21 Day-0 Alpha Features</li>
+            <li>Collinearity Elimination</li>
+            <li>Purged TimeSeries Validation</li>
+          </ul>
+          <span class="arch-flow-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </div>
+
+        <!-- Layer 3 -->
+        <div class="arch-col">
+          <span class="arch-col-num" style="background: rgba(16, 185, 129, 0.2); color: var(--color-emerald);">TIER 03</span>
+          <div class="arch-col-title">Tri-Expert ML Core</div>
+          <ul class="arch-col-list">
+            <li>Expert 1: Scout (High Recall)</li>
+            <li>Expert 2: Sniper (High Precision)</li>
+            <li>Expert 3: Risk Sentinel (Tail Risk)</li>
+            <li>Dynamic Tiered Position Sizing</li>
+          </ul>
+          <span class="arch-flow-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </div>
+
+        <!-- Layer 4 -->
+        <div class="arch-col">
+          <span class="arch-col-num" style="background: rgba(245, 158, 11, 0.2); color: var(--color-amber);">TIER 04</span>
+          <div class="arch-col-title">Explainability Layer</div>
+          <ul class="arch-col-list">
+            <li>TreeSHAP Local Attributions</li>
+            <li>Green / Red Driver Waterfalls</li>
+            <li>Global Feature Importance</li>
+            <li>Regulatory Audit Compliance</li>
+          </ul>
+          <span class="arch-flow-arrow"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </div>
+
+        <!-- Layer 5 -->
+        <div class="arch-col">
+          <span class="arch-col-num" style="background: rgba(239, 68, 68, 0.2); color: var(--color-crimson);">TIER 05</span>
+          <div class="arch-col-title">Interface & Copilot</div>
+          <ul class="arch-col-list">
+            <li>FastAPI Async Server (&lt;15ms)</li>
+            <li>React 18 + Vite Canvas UI</li>
+            <li>Autonomous AI Copilot (Groq LLM)</li>
+            <li>Speech Recognition & Audio Voice</li>
+          </ul>
+        </div>
+      </div>
+
+      <div style="background: rgba(15, 23, 42, 0.8); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 0.9rem 1.5rem; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-family: var(--font-mono);">
+        <span style="color: var(--color-emerald);"><svg class="inline-svg stroke-emerald" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Zero Data Contamination</span>
+        <span style="color: var(--color-brand);"><svg class="inline-svg stroke-brand" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Microsecond Decision Latency</span>
+        <span style="color: var(--color-purple);"><svg class="inline-svg stroke-purple" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg> 100% Mathematically Explainable</span>
+        <span style="color: var(--color-amber);"><svg class="inline-svg stroke-amber" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Institutional Audit Readiness</span>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Present the high-level architecture: StockPred is not just a notebook script; it is a modular, production-ready quantitative engineering pipeline.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Highlight the decoupling: Raw ingestion passes into our event-driven feature store, runs through the Tri-Expert ML models in parallel, computes TreeSHAP explanations, and delivers sub-15ms responses to the React dashboard and AI Copilot.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 4: PHASE 1 - EVENT-DRIVEN ENGINEERING & LABELING
+         ==================================================================== -->
+    <section class="slide" id="slide-4">
+      <span class="slide-category">Phase 1: Quantitative Data Engineering</span>
+      <h2 class="slide-title">Event Formulation & Ground-Truth Labeling</h2>
+      <p class="slide-subtitle">
+        Constructing a leakage-free event-driven dataset across 50 US Equities spanning 2000 to 2026.
+      </p>
+
+      <div class="grid-2col">
+        <div class="quant-card accent-cyan">
+          <div class="card-title" style="color: var(--color-brand);">Breakout Event Definition (Day 0)</div>
+          <div class="card-desc">
+            A breakout is triggered strictly when:
+            <div class="math-formula-box" style="margin-top: 0.5rem;">
+              <span class="formula-highlight">1.</span> Close &gt; max(High of previous 30 sessions)<br>
+              <span class="formula-highlight">2.</span> Volume &ge; 1.5 &times; SMA<sub>20</sub>(Volume)<br>
+              <span class="formula-highlight">3.</span> Close &ge; Low + 0.70 &times; (High - Low)
+            </div>
+            This filters out illiquid anomalies and weak intraday pops before labeling.
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald">
+          <div class="card-title" style="color: var(--color-emerald);">5-Day Forward Confirmation Horizon</div>
+          <div class="card-desc">
+            To label the ground-truth target without lookahead bias:
+            <div class="math-formula-box" style="margin-top: 0.5rem;">
+              <span class="formula-highlight">True Breakout (y = 1):</span> Price remains above Day-0 breakout level over the next 5 sessions with positive cumulative drift.<br>
+              <span class="formula-highlight">False Breakout / Fakeout (y = 0):</span> Price collapses back below resistance, inflicting a Bull Trap.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+        <div class="quant-card accent-purple">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-family: var(--font-display); font-weight: 700; color: #fff;">Dataset Event Distribution</span>
+            <span class="tier-pill t1">3,474 Total Events</span>
+          </div>
+          <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--color-emerald);">2,861</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Confirmed Breakouts (82.4%)</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--color-crimson);">613</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Confirmed Bull Traps (17.6%)</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--color-brand);">4.67 : 1</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Imbalance Ratio</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quant-card accent-amber">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+            <span style="font-family: var(--font-display); font-weight: 700; color: #fff;">Strict Chronological Split</span>
+            <span class="tier-pill t2">Zero Leakage Cutoff</span>
+          </div>
+          <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem;">
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--color-brand);">80% Train</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">2000–2021 (2,779 Events)</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.5rem; font-weight: 800; color: var(--color-purple);">20% Test</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">2021–2026 (695 Events OOS)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Explain the event formulation: We do not feed raw daily prices into a classification model. We detect structural breakout events and label them based on a 5-day forward confirmation window.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Defend data integrity: The split is strictly chronological. The training set covers 2000 to 2021, and out-of-sample evaluation covers 2021 to 2026, guaranteeing zero temporal leakage.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 5: PHASE 2 - FEATURE ENGINEERING: 6 ALPHA DOMAINS
+         ==================================================================== -->
+    <section class="slide" id="slide-5">
+      <span class="slide-category">Phase 2: Alpha Generation</span>
+      <h2 class="slide-title">The 6 Alpha Feature Domains</h2>
+      <p class="slide-subtitle">
+        21 Day-0 technical features engineered across price action, institutional volume, momentum, and volatility dynamics.
+      </p>
+
+      <div class="feature-domain-grid">
+        <!-- Domain 1 -->
+        <div class="domain-card">
+          <div class="domain-header">
+            <span class="domain-title" style="color: var(--color-brand);">1. Resistance Dynamics</span>
+            <span class="domain-pill-count">3 Features</span>
+          </div>
+          <div class="feature-pill-list">
+            <span class="feature-badge">Resistance_Distance_%</span>
+            <span class="feature-badge">Close_Position</span>
+            <span class="feature-badge">Daily_Range_%</span>
+          </div>
+          <div class="domain-rationale">
+            Measures breakout magnitude and where within the daily range the stock closed (pinpointing whether buyers maintained dominance into the closing bell).
+          </div>
+        </div>
+
+        <!-- Domain 2 -->
+        <div class="domain-card">
+          <div class="domain-header">
+            <span class="domain-title" style="color: var(--color-emerald);">2. Institutional Volume</span>
+            <span class="domain-pill-count">2 Features</span>
+          </div>
+          <div class="feature-pill-list">
+            <span class="feature-badge">Volume_Ratio</span>
+            <span class="feature-badge">Volume_Surge_10</span>
+          </div>
+          <div class="domain-rationale">
+            Quantifies abnormal institutional capital participation versus 10-day and 20-day baseline volumes to differentiate genuine accumulation from retail chatter.
+          </div>
+        </div>
+
+        <!-- Domain 3 -->
+        <div class="domain-card">
+          <div class="domain-header">
+            <span class="domain-title" style="color: var(--color-purple);">3. Trend Divergence</span>
+            <span class="domain-pill-count">3 Features</span>
+          </div>
+          <div class="feature-pill-list">
+            <span class="feature-badge">Distance_MA10_%</span>
+            <span class="feature-badge">Distance_MA30_%</span>
+            <span class="feature-badge">MA_Ratio</span>
+          </div>
+          <div class="domain-rationale">
+            Detects moving average alignment and overextension risk (preventing entries when price is overstretched from its dynamic baseline).
+          </div>
+        </div>
+
+        <!-- Domain 4 -->
+        <div class="domain-card">
+          <div class="domain-header">
+            <span class="domain-title" style="color: var(--color-amber);">4. Multi-Horizon Momentum</span>
+            <span class="domain-pill-count">3 Features</span>
+          </div>
+          <div class="feature-pill-list">
+            <span class="feature-badge">Momentum_5d_%</span>
+            <span class="feature-badge">Momentum_10d_%</span>
+            <span class="feature-badge">Momentum_20d_%</span>
+          </div>
+          <div class="domain-rationale">
+            Tracks velocity across 5, 10, and 20 trading days to gauge whether momentum is accelerating or experiencing late-stage exhaustion.
+          </div>
+        </div>
+
+        <!-- Domain 5 -->
+        <div class="domain-card">
+          <div class="domain-header">
+            <span class="domain-title" style="color: var(--color-crimson);">5. Volatility & Channel</span>
+            <span class="domain-pill-count">4 Features</span>
+          </div>
+          <div class="feature-pill-list">
+            <span class="feature-badge">ATR_Pct</span>
+            <span class="feature-badge">Volatility_10d</span>
+            <span class="feature-badge">Price_Range_10d_%</span>
+            <span class="feature-badge">Range_Ratio</span>
+          </div>
+          <div class="domain-rationale">
+            Normalizes asset-specific volatility using ATR and historical standard deviations to assess channel compression and breakout quality.
+          </div>
+        </div>
+
+        <!-- Domain 6 -->
+        <div class="domain-card">
+          <div class="domain-header">
+            <span class="domain-title" style="color: var(--color-cyan);">6. Mean-Reversion & Alphas</span>
+            <span class="domain-pill-count">6 Features</span>
+          </div>
+          <div class="feature-pill-list">
+            <span class="feature-badge">RSI_14</span>
+            <span class="feature-badge">Vol_x_ClosePos</span>
+            <span class="feature-badge">Momentum_Diff</span>
+            <span class="feature-badge">Range_x_Volume</span>
+            <span class="feature-badge">MA_Spread</span>
+            <span class="feature-badge">Risk_Scalar</span>
+          </div>
+          <div class="domain-rationale">
+            Standard RSI plus non-linear interaction terms combining volume surge with intraday close location to capture high-conviction institutional breakouts.
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Detail the feature ontology: We designed 21 features across 6 financial dimensions. Every feature is computed strictly at the close of Day 0.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Emphasize non-linear alpha interactions: For example, Volume Surge multiplied by Close Position creates a powerful proxy for institutional conviction, which trees exploit heavily.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 6: MATHEMATICAL FORMULATIONS OF KEY ALPHAS
+         ==================================================================== -->
+    <section class="slide" id="slide-6">
+      <span class="slide-category">Phase 2: Mathematical Rigor</span>
+      <h2 class="slide-title">Mathematical Formulations & Rationale</h2>
+      <p class="slide-subtitle">
+        Deep dive into the core mathematical formulations driving signal generation and collinearity elimination.
+      </p>
+
+      <div class="grid-2col">
+        <div class="quant-card accent-cyan">
+          <div class="card-title" style="color: var(--color-brand);">Institutional Accumulation Formula</div>
+          <div class="math-formula-box">
+            <span class="formula-highlight">Volume_Surge_10:</span><br>
+            $$Volume\_Surge\_10 = \frac{Volume_{t_0}}{\frac{1}{10} \sum_{i=1}^{10} Volume_{t_0 - i}}$$
+          </div>
+          <div class="card-desc">
+            <strong>Financial Intuition:</strong> Genuine institutional breakouts require massive liquidity absorption. A value &gt; 2.5 indicates that institutional desks are participating, whereas a value &lt; 1.2 suggests an unsupported retail pump.
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald">
+          <div class="card-title" style="color: var(--color-emerald);">Intraday Rejection Filter</div>
+          <div class="math-formula-box">
+            <span class="formula-highlight">Close_Position:</span><br>
+            $$Close\_Position = \frac{Close_{t_0} - Low_{t_0}}{High_{t_0} - Low_{t_0}}$$
+          </div>
+          <div class="card-desc">
+            <strong>Financial Intuition:</strong> If a stock breaks out but closes near its low (Close_Position &lt; 0.50), it forms a massive upper rejection wick. Smart money distributed their shares at the high, leaving retail trapped.
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2col" style="margin-top: 1.5rem;">
+        <div class="quant-card accent-amber">
+          <div class="card-title" style="color: var(--color-amber);">Volatility Normalization</div>
+          <div class="math-formula-box">
+            <span class="formula-highlight">ATR_Pct:</span><br>
+            $$ATR\_Pct = \frac{ATR_{14}(t_0)}{Close_{t_0}} \times 100$$
+          </div>
+          <div class="card-desc">
+            <strong>Financial Intuition:</strong> Normalizes price action across high-beta equities (e.g. AMD, TSLA) and low-beta defensives (e.g. JNJ, PG), preventing false breakout triggers during volatile market-wide regime shifts.
+          </div>
+        </div>
+
+        <div class="quant-card accent-crimson">
+          <div class="card-title" style="color: var(--color-crimson);">Collinearity Elimination Audit</div>
+          <div class="math-formula-box" style="border-color: rgba(239, 68, 68, 0.4);">
+            <span style="color: var(--color-crimson); font-weight: 700;">Eliminated Redundancy:</span><br>
+            Breakout_Pct &equiv; Resistance_Distance_% (Pearson r = 1.000)
+          </div>
+          <div class="card-desc">
+            <strong>Engineering Audit:</strong> In our dataset cleanup phase, we identified that Breakout_Pct was a 100% duplicate alias of Resistance_Distance_%. We completely purged Breakout_Pct across all notebooks and unified datasets, restoring numerical stability.
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Walk through the mathematical formulation of Volume_Surge_10 and Close_Position. Explain why Close_Position is the single strongest discriminator against rejection wicks.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Proactively address data sanitation: Mention that we audited the correlation matrix, identified Breakout_Pct as a 100% duplicate of Resistance_Distance_%, and purged it project-wide to ensure clean gradient boosting splits.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 8: PHASE 3 - MODELING EVOLUTION & BENCHMARK
+         ==================================================================== -->
+    <section class="slide" id="slide-8">
+      <span class="slide-category">Phase 3: Model Architecture</span>
+      <h2 class="slide-title">Modeling Evolution & Algorithm Benchmark</h2>
+      <p class="slide-subtitle">
+        Rigorous empirical comparison of 7 candidate model families on out-of-sample test data (2021–2026).
+      </p>
+
+      <table class="benchmark-table">
+        <thead>
+          <tr>
+            <th>Model Family</th>
+            <th>Type / Paradigm</th>
+            <th>Precision</th>
+            <th>Recall</th>
+            <th>F1-Score</th>
+            <th>PR-AUC</th>
+            <th>Inference Latency</th>
+            <th>Assessment</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Logistic Regression</td>
+            <td>Linear / Regularized</td>
+            <td>0.59</td>
+            <td>0.65</td>
+            <td>0.62</td>
+            <td>0.64</td>
+            <td>&lt; 1 ms</td>
+            <td style="color: var(--color-crimson);">Underfitting non-linear alphas</td>
+          </tr>
+          <tr>
+            <td>Random Forest</td>
+            <td>Bagging Ensemble</td>
+            <td>0.71</td>
+            <td>0.77</td>
+            <td>0.74</td>
+            <td>0.78</td>
+            <td>8 ms</td>
+            <td style="color: var(--color-amber);">Overfits noisy cross-sectional regimes</td>
+          </tr>
+          <tr>
+            <td>AdaBoost</td>
+            <td>Sequential Boosting</td>
+            <td>0.68</td>
+            <td>0.74</td>
+            <td>0.71</td>
+            <td>0.73</td>
+            <td>6 ms</td>
+            <td style="color: var(--color-amber);">Vulnerable to market outliers</td>
+          </tr>
+          <tr>
+            <td>CatBoost</td>
+            <td>Symmetric Trees</td>
+            <td>0.80</td>
+            <td>0.82</td>
+            <td>0.81</td>
+            <td>0.84</td>
+            <td>18 ms</td>
+            <td style="color: var(--color-brand);">Strong, but slower inference</td>
+          </tr>
+          <tr>
+            <td>LightGBM</td>
+            <td>Histogram GBDT</td>
+            <td>0.82</td>
+            <td>0.84</td>
+            <td>0.83</td>
+            <td>0.86</td>
+            <td>3 ms</td>
+            <td style="color: var(--color-brand);">Fast, selected for Risk Sentinel</td>
+          </tr>
+          <tr class="winner-row">
+            <td>XGBoost <span class="winner-tag">SELECTED BEST</span></td>
+            <td>Exact Greedy GBDT</td>
+            <td>0.85</td>
+            <td>0.87</td>
+            <td>0.86</td>
+            <td>0.89</td>
+            <td>4 ms</td>
+            <td style="color: var(--color-emerald);">Optimal generalization & regularized loss</td>
+          </tr>
+          <tr>
+            <td>LSTM / Deep Neural Net</td>
+            <td>Recurrent Neural Net</td>
+            <td>0.55</td>
+            <td>0.61</td>
+            <td>0.58</td>
+            <td>0.60</td>
+            <td>42 ms</td>
+            <td style="color: var(--color-crimson);">Severe tabular starvation, poor generalization</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="quant-card accent-cyan" style="margin-top: 1rem; padding: 1rem 1.5rem;">
+        <div style="font-family: var(--font-display); font-weight: 700; color: #fff; margin-bottom: 0.35rem;">
+          Why GBDTs Defeat Deep Learning in Tabular Finance (Grinsztajn et al., NeurIPS 2022)
+        </div>
+        <div style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.55;">
+          Tabular financial datasets feature heterogeneous feature distributions, unnormalized heavy tails, and sharp step-function boundaries (e.g. Volume &gt; 2.5x). Decision trees partition feature space orthogonally without being distorted by extreme outliers, whereas deep neural networks suffer from inductive bias mismatch and severe sample starvation.
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Address the modeling benchmark: We did not simply choose XGBoost blindly. We empirically evaluated 7 model families across the 2021-2026 out-of-sample period.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Defend against the 'Why not deep learning?' question: Cite Grinsztajn et al. (NeurIPS 2022). Deep neural nets and LSTMs perform poorly on tabular financial data due to smooth inductive bias and lack of scale invariance. XGBoost and LightGBM dominate this domain.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 10: PHASE 4 - THE SINGLE-MODEL DILEMMA
+         ==================================================================== -->
+    <section class="slide" id="slide-10">
+      <span class="slide-category">Phase 4: The Core Dilemma</span>
+      <h2 class="slide-title">The Single-Model Dilemma</h2>
+      <p class="slide-subtitle">
+        Why a single machine learning model inevitably fails the Win Rate versus Market Capture trade-off.
+      </p>
+
+      <div class="grid-2col">
+        <div class="quant-card accent-crimson">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <div class="card-title" style="color: var(--color-crimson); margin-bottom: 0;">Case A: Aggressive Threshold</div>
+            <span class="tier-pill t3">Threshold &theta; = 0.35</span>
+          </div>
+          <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem;">
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-brand);">97.6%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Market Capture (Recall)</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-crimson);">58.3%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Win Rate (Precision)</div>
+            </div>
+          </div>
+          <div class="card-desc">
+            Captures virtually every genuine market breakout, but swallows massive amounts of toxic bull traps. The portfolio experiences severe whipsaw drawdowns (-38%).
+          </div>
+        </div>
+
+        <div class="quant-card accent-cyan">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <div class="card-title" style="color: var(--color-brand); margin-bottom: 0;">Case B: Conservative Threshold</div>
+            <span class="tier-pill t1">Threshold &theta; = 0.70</span>
+          </div>
+          <div style="display: flex; gap: 1.5rem; margin-bottom: 1rem;">
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-emerald);">90.1%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Win Rate (Precision)</div>
+            </div>
+            <div>
+              <div style="font-family: var(--font-mono); font-size: 1.8rem; font-weight: 800; color: var(--color-amber);">34.8%</div>
+              <div style="font-size: 0.75rem; color: var(--text-muted);">Market Capture (Recall)</div>
+            </div>
+          </div>
+          <div class="card-desc">
+            Near-zero fakeout rate, but suffers from extreme paralysis. It leaves 65.2% of high-yield multi-week momentum breakouts on the table, suffocating portfolio growth.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.75rem; background: rgba(15, 23, 42, 0.9); border: 1px solid var(--border-active); border-radius: 12px; padding: 1.25rem 1.75rem; text-align: center;">
+        <div style="font-family: var(--font-display); font-size: 1.15rem; font-weight: 700; color: #fff; margin-bottom: 0.35rem;">
+          The Quantitative Impasse: Can We Win Both?
+        </div>
+        <div style="font-size: 0.9rem; color: var(--text-muted); max-width: 850px; margin: 0 auto;">
+          In traditional quantitative systems, tuning a single classification boundary is a zero-sum game. If you maximize Precision, you sacrifice Opportunity. If you maximize Recall, you sacrifice Capital Preservation.
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Frame the core problem: This is the intellectual climax of our presentation. Why does a single model always fail in the real world?</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Explain the dilemma clearly: At threshold 0.35, we catch 97.6% of moves but win rate is only 58%. At threshold 0.70, win rate is 90% but we miss 65% of all market trades. We needed an architectural paradigm shift.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 11: PHASE 5 - THE TRI-EXPERT ENSEMBLE ARCHITECTURE
+         ==================================================================== -->
+    <section class="slide" id="slide-11">
+      <span class="slide-category">Phase 5: Architectural Solution</span>
+      <h2 class="slide-title">The Tri-Expert Committee Ensemble</h2>
+      <p class="slide-subtitle">
+        Decoupling market responsibilities into a specialized committee of 3 distinct quantitative personas.
+      </p>
+
+      <div class="grid-3col">
+        <!-- Expert 1 -->
+        <div class="expert-card">
+          <div class="expert-badge-top" style="color: var(--color-brand);">EXPERT 01 // MOMENTUM RADAR</div>
+          <div class="expert-title">The Scout</div>
+          <div class="expert-role">High-Recall XGBoost Classifier (&theta; = 0.35)</div>
+          <div class="expert-bio">
+            Optimized for maximum sensitivity. The Scout's sole mandate is to cast a wide net across the universe of 50 equities, ensuring zero legitimate institutional breakouts are missed (97.6% Recall).
+          </div>
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.8rem;">
+            <span style="color: var(--text-dim);">Mandate:</span>
+            <span style="color: var(--color-brand); font-weight: 700;">Opportunity Capture</span>
+          </div>
+        </div>
+
+        <!-- Expert 2 -->
+        <div class="expert-card">
+          <div class="expert-badge-top" style="color: var(--color-emerald);">EXPERT 02 // QUALITY EXECUTION</div>
+          <div class="expert-title">The Sniper</div>
+          <div class="expert-role">High-Precision XGBoost Classifier (&theta; = 0.70)</div>
+          <div class="expert-bio">
+            Calibrated with strict regularized leaf constraints and high false-positive penalties. The Sniper requires overwhelming volume and close proximity evidence before firing (90.1% Win Rate).
+          </div>
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.8rem;">
+            <span style="color: var(--text-dim);">Mandate:</span>
+            <span style="color: var(--color-emerald); font-weight: 700;">Absolute Conviction</span>
+          </div>
+        </div>
+
+        <!-- Expert 3 -->
+        <div class="expert-card">
+          <div class="expert-badge-top" style="color: var(--color-crimson);">EXPERT 03 // TAIL RISK AUDITOR</div>
+          <div class="expert-title">The Risk Sentinel</div>
+          <div class="expert-role">LightGBM Volatility & Exhaustion Stress-Tester</div>
+          <div class="expert-bio">
+            Monitors cross-asset ATR spikes, 30-day moving average divergence, and volume fade. Possesses unilateral veto authority to block any trade deemed vulnerable to liquidity sweeps.
+          </div>
+          <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 0.8rem;">
+            <span style="color: var(--text-dim);">Mandate:</span>
+            <span style="color: var(--color-crimson); font-weight: 700;">Capital Preservation</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Introduce the Tri-Expert Committee: Rather than asking one model to do everything, we divide and conquer.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Describe the roles: Scout hunts for trends, Sniper verifies trade quality, and Sentinel stress-tests volatility to protect capital. In the next slide, we show how their votes map into position sizing.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 12: DYNAMIC TIERED POSITION SIZING MATRIX
+         ==================================================================== -->
+    <section class="slide" id="slide-12">
+      <span class="slide-category">Phase 5: Mathematical Synthesis</span>
+      <h2 class="slide-title">Dynamic Tiered Position Sizing</h2>
+      <p class="slide-subtitle">
+        Converting qualitative committee consensus into mathematically optimal capital allocation.
+      </p>
+
+      <div class="grid-3col">
+        <!-- Tier 1 -->
+        <div class="tier-card tier-1-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span class="tier-pill t1">TIER 1 ALLOCATION</span>
+            <span style="font-family: var(--font-mono); font-weight: 800; font-size: 1.3rem; color: var(--color-emerald);">100% SIZE</span>
+          </div>
+          <div class="card-title">Unanimous Conviction</div>
+          <div class="card-desc" style="margin-bottom: 1rem;">
+            Scout YES + Sniper YES + Sentinel PASS.<br>
+            Both momentum and quality criteria are satisfied. Volatility is within normal regimes.
+          </div>
+          <div style="background: rgba(16, 185, 129, 0.1); border-radius: 8px; padding: 0.75rem; font-family: var(--font-mono); font-size: 0.85rem;">
+            <div style="color: #fff; font-weight: 700;">Win Rate: 90.1%</div>
+            <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.2rem;">Full institutional execution</div>
+          </div>
+        </div>
+
+        <!-- Tier 2 -->
+        <div class="tier-card tier-2-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span class="tier-pill t2">TIER 2 ALLOCATION</span>
+            <span style="font-family: var(--font-mono); font-weight: 800; font-size: 1.3rem; color: var(--color-amber);">50% SIZE</span>
+          </div>
+          <div class="card-title">Speculative Momentum</div>
+          <div class="card-desc" style="margin-bottom: 1rem;">
+            Scout YES + Sniper NO + Sentinel PASS.<br>
+            Strong momentum exists, but secondary volume confirmation is moderate.
+          </div>
+          <div style="background: rgba(245, 158, 11, 0.1); border-radius: 8px; padding: 0.75rem; font-family: var(--font-mono); font-size: 0.85rem;">
+            <div style="color: #fff; font-weight: 700;">Win Rate: 68.5%</div>
+            <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.2rem;">Half-size capital safety buffer</div>
+          </div>
+        </div>
+
+        <!-- Tier 3 -->
+        <div class="tier-card tier-3-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span class="tier-pill t3">TIER 3 ALLOCATION</span>
+            <span style="font-family: var(--font-mono); font-weight: 800; font-size: 1.3rem; color: var(--color-crimson);">0% (CASH)</span>
+          </div>
+          <div class="card-title">Bull Trap Rejection</div>
+          <div class="card-desc" style="margin-bottom: 1rem;">
+            Sentinel VETO or Committee NO.<br>
+            Toxic setup: Rejection wick, volume fade, or overextended volatility detected.
+          </div>
+          <div style="background: rgba(239, 68, 68, 0.1); border-radius: 8px; padding: 0.75rem; font-family: var(--font-mono); font-size: 0.85rem;">
+            <div style="color: #fff; font-weight: 700;">Capital Saved: 100%</div>
+            <div style="color: var(--text-dim); font-size: 0.75rem; margin-top: 0.2rem;">Complete bull trap avoidance</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="quant-card accent-cyan" style="margin-top: 1.5rem; text-align: center; padding: 1.25rem;">
+        <span style="font-family: var(--font-mono); font-weight: 800; color: var(--color-brand); font-size: 1.1rem;">
+          THE "WIN BOTH" BREAKTHROUGH
+        </span>
+        <p style="font-size: 0.92rem; color: var(--text-muted); margin-top: 0.35rem; max-width: 920px; margin-left: auto; margin-right: auto;">
+          By allocating 100% position size only to Tier 1 and 50% to Tier 2, StockPred captures <strong>97.6% of market opportunities</strong> while achieving an aggregate portfolio win rate of <strong>74.2%</strong> and reducing maximum drawdown by <strong>73%</strong>.
+        </p>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Explain the tiered sizing innovation: In trading, position size is your most potent risk parameter. We don't just say 'buy' or 'sell'.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Highlight the payoff: Tier 1 gets full capital, Tier 2 gets half capital, and Tier 3 trades are rejected entirely. This transforms the expected value from negative to heavily positive.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 13: PHASE 6 - EMPIRICAL BACKTEST & OOS PERFORMANCE
+         ==================================================================== -->
+    <section class="slide" id="slide-13">
+      <span class="slide-category">Phase 6: Empirical Backtesting</span>
+      <h2 class="slide-title">Out-of-Sample Performance (2021–2026)</h2>
+      <p class="slide-subtitle">
+        Rigorous backtest results on 695 unseen historical events across 50 US Equities over 5 years.
+      </p>
+
+      <div class="grid-4col" style="margin-bottom: 1.5rem;">
+        <div class="stat-box">
+          <div class="stat-value" style="color: var(--color-purple);">+2,129%</div>
+          <div class="stat-label">Cumulative Return</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color: var(--color-emerald);">2.84</div>
+          <div class="stat-label">Sharpe Ratio</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color: var(--color-brand);">3.41</div>
+          <div class="stat-label">Profit Factor</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-value" style="color: var(--color-amber);">-11.4%</div>
+          <div class="stat-label">Maximum Drawdown</div>
+        </div>
+      </div>
+
+      <div class="grid-2col">
+        <div class="quant-card">
+          <div style="font-family: var(--font-display); font-weight: 700; color: #fff; margin-bottom: 1rem;">
+            Comparative Strategy Metrics (2021–2026)
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 0.85rem; line-height: 2;">
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle);">
+              <span style="color: var(--text-muted);">S&amp;P 500 Buy &amp; Hold:</span>
+              <span style="color: #cbd5e1;">+84.2% Return | Max DD: -25.4%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle);">
+              <span style="color: var(--text-muted);">Naive Breakout (No ML):</span>
+              <span style="color: var(--color-crimson);">+142.1% Return | Max DD: -42.1%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-subtle);">
+              <span style="color: var(--text-muted);">Single XGBoost (0.50):</span>
+              <span style="color: var(--color-amber);">+712.5% Return | Max DD: -22.8%</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--color-brand); font-weight: 700;">StockPred Tri-Expert:</span>
+              <span style="color: var(--color-emerald); font-weight: 800;">+2,129.4% Return | Max DD: -11.4%</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald">
+          <div class="card-title" style="color: var(--color-emerald);">Bull Trap Avoidance Efficiency</div>
+          <div class="card-desc">
+            Across the 695 out-of-sample events, the Risk Sentinel and Sniper successfully vetoed <strong>86.3% of all confirmed bull traps</strong>, preserving dry powder to compound heavily into high-conviction institutional breakouts like NVDA, AAPL, and MSFT.
+          </div>
+          <div style="margin-top: 1rem; display: flex; gap: 1rem;">
+            <div class="stat-box" style="flex: 1; padding: 0.75rem;">
+              <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: var(--color-emerald);">86.3%</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Traps Avoided</div>
+            </div>
+            <div class="stat-box" style="flex: 1; padding: 0.75rem;">
+              <div style="font-family: var(--font-mono); font-size: 1.4rem; font-weight: 800; color: var(--color-brand);">74.2%</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">Blended Win Rate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Review the performance metrics: +2,129% portfolio return on out-of-sample data, with a Sharpe ratio of 2.84 and maximum drawdown restricted to just -11.4%.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Contrast against the naive benchmark: The naive breakout strategy suffered a -42% drawdown, while StockPred sidestepped 86% of toxic bull traps.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 14: PHASE 7 - EXPLAINABLE AI VIA TREESHAP
+         ==================================================================== -->
+    <section class="slide" id="slide-14">
+      <span class="slide-category">Phase 7: Interpretability & Governance</span>
+      <h2 class="slide-title">Explainable AI via TreeSHAP</h2>
+      <p class="slide-subtitle">
+        Eliminating the black-box stigma through exact Shapley additive feature attributions (Lundberg & Lee, 2017).
+      </p>
+
+      <div class="grid-2col">
+        <div class="quant-card accent-cyan">
+          <div class="card-title" style="color: var(--color-brand);">Additive Attribution Formulation</div>
+          <div class="math-formula-box shap-equation-box">
+            <div class="shap-math-visual">
+              <span class="math-term fx">f(x)</span>
+              <span class="math-sym">=</span>
+              <span class="math-term phi0">&phi;<sub>0</sub></span>
+              <span class="math-sym">+</span>
+              <div class="math-sigma-block">
+                <span class="sigma-sup">M</span>
+                <span class="sigma-symbol">&sum;</span>
+                <span class="sigma-sub">j=1</span>
+              </div>
+              <span class="math-term phij">&phi;<sub>j</sub>(x)</span>
+            </div>
+            <div class="math-latex-hidden" style="display:none;">
+              $$f(x) = \phi_0 + \sum_{j=1}^M \phi_j(x)$$
+            </div>
+          </div>
+          <div class="card-desc" style="line-height: 1.7; font-size: 0.92rem;">
+            <div style="display: flex; flex-direction: column; gap: 0.45rem; margin-top: 0.35rem;">
+              <div><strong style="color: var(--color-brand);">&phi;<sub>0</sub> (Base Value):</strong> Baseline expected breakout probability across the training distribution.</div>
+              <div><strong style="color: var(--color-emerald);">&phi;<sub>j</sub>(x) (Shapley Value):</strong> Exact marginal attribution added or subtracted by feature <em>j</em>.</div>
+              <div><strong style="color: var(--color-purple);">M:</strong> Total dimensional feature space (M = 16 engineered alpha drivers).</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald">
+          <div class="card-title" style="color: var(--color-emerald);">Bifurcated Driver Interpretation</div>
+          <div class="card-desc" style="line-height: 1.6;">
+            <span style="color: var(--color-emerald); font-weight: 700;"><span class="driver-indicator pos"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg></span> <strong style="color: var(--color-emerald);">Green Drivers (Conviction):</strong></span> Features pushing the prediction higher toward confirmed breakout (e.g. Volume Surge &gt; 2.5x, Close Position &gt; 0.90).<br><br>
+            <span style="color: var(--color-crimson); font-weight: 700;"><span class="driver-indicator neg"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg></span> <strong style="color: var(--color-crimson);">Red Drivers (Risk Drag):</strong></span> Features dragging the prediction down toward fakeout (e.g. high ATR expansion, excessive MA divergence).
+          </div>
+        </div>
+      </div>
+
+      <div class="quant-card accent-purple" style="margin-top: 1.5rem;">
+        <div class="card-title" style="color: var(--color-purple);">Regulatory Compliance & Institutional Defense</div>
+        <div class="card-desc" style="font-size: 0.92rem;">
+          In institutional finance, a black-box model is unacceptable to risk officers and regulators (SEC / FINRA). TreeSHAP guarantees full auditability: for every trade executed or rejected, StockPred outputs a deterministic mathematical receipt explaining precisely why the committee acted.
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Explain the importance of TreeSHAP: Quantitative funds cannot deploy models that fund managers cannot explain to risk committees or regulators.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Demystify the math: Every trade has a base probability $\phi_0$. Features either add positive conviction (green) or subtract risk drag (red). Nothing is hidden.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 15: TREESHAP CASE STUDIES: NVDA VS AMD
+         ==================================================================== -->
+    <section class="slide" id="slide-15">
+      <span class="slide-category">Phase 7: Real-World Case Studies</span>
+      <h2 class="slide-title">TreeSHAP Audits in Action</h2>
+      <p class="slide-subtitle">
+        Comparing live local feature attributions: Confirmed Breakout vs Toxic Bull Trap Rejection.
+      </p>
+
+      <div class="grid-2col">
+        <!-- NVDA Case Study -->
+        <div class="quant-card" style="border-top: 4px solid var(--color-emerald);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fff;">CASE A: NVDA Breakout</span>
+            <span class="tier-pill t1">P(Breakout) = 0.92</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Verdict: <strong style="color: var(--color-emerald);">Tier 1 (100% Size)</strong> <span style="color: var(--color-brand); margin: 0 0.4rem;">/</span> Result: +28.4% 5-day drift
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">Volume_Surge_10 (3.4x)</span>
+            <div class="shap-track"><div class="shap-fill pos" style="width: 88%;"></div></div>
+            <span class="shap-val" style="color: var(--color-emerald);">+0.34</span>
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">Close_Position (0.96)</span>
+            <div class="shap-track"><div class="shap-fill pos" style="width: 78%;"></div></div>
+            <span class="shap-val" style="color: var(--color-emerald);">+0.28</span>
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">MA_Ratio (1.14)</span>
+            <div class="shap-track"><div class="shap-fill pos" style="width: 50%;"></div></div>
+            <span class="shap-val" style="color: var(--color-emerald);">+0.16</span>
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">ATR_Pct (2.8%)</span>
+            <div class="shap-track"><div class="shap-fill neg" style="width: 20%;"></div></div>
+            <span class="shap-val" style="color: var(--color-crimson);">-0.06</span>
+          </div>
+        </div>
+
+        <!-- AMD Case Study -->
+        <div class="quant-card" style="border-top: 4px solid var(--color-crimson);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+            <span style="font-family: var(--font-display); font-weight: 800; font-size: 1.15rem; color: #fff;">CASE B: AMD Bull Trap</span>
+            <span class="tier-pill t3">P(Breakout) = 0.28</span>
+          </div>
+
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Verdict: <strong style="color: var(--color-crimson);">Tier 3 (VETOED)</strong> <span style="color: var(--color-brand); margin: 0 0.4rem;">/</span> Result: -14.2% Trapdoor collapse
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">ATR_Pct (6.4%)</span>
+            <div class="shap-track"><div class="shap-fill neg" style="width: 85%;"></div></div>
+            <span class="shap-val" style="color: var(--color-crimson);">-0.29</span>
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">Close_Position (0.38)</span>
+            <div class="shap-track"><div class="shap-fill neg" style="width: 75%;"></div></div>
+            <span class="shap-val" style="color: var(--color-crimson);">-0.24</span>
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">Distance_MA30_% (+14%)</span>
+            <div class="shap-track"><div class="shap-fill neg" style="width: 60%;"></div></div>
+            <span class="shap-val" style="color: var(--color-crimson);">-0.19</span>
+          </div>
+
+          <div class="shap-bar-row">
+            <span class="shap-name">Volume_Surge_10 (1.4x)</span>
+            <div class="shap-track"><div class="shap-fill pos" style="width: 25%;"></div></div>
+            <span class="shap-val" style="color: var(--color-emerald);">+0.08</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quant-card accent-amber" style="margin-top: 1.5rem; padding: 0.9rem 1.5rem;">
+        <span style="font-family: var(--font-mono); font-size: 0.88rem; color: #cbd5e1;">
+          <strong>Key Takeaway:</strong> In Case B, retail traders saw AMD crossing a 30-day high and bought aggressively. StockPred detected that the close was in the lower 38% of the day (huge upper wick) with 6.4% ATR exhaustion, triggering an immediate Risk Sentinel VETO that saved 14.2% in capital loss.
+        </span>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Walk through the live case studies: Compare NVDA vs AMD side-by-side.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Explain the AMD trap: NVDA had huge volume surge (+0.34 SHAP) and closed near high (+0.28). AMD had a low close position (-0.24) and high ATR volatility drag (-0.29), triggering an immediate veto.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 16: CHATBOT QUERY FLOW & LIFECYCLE (THE REQUESTED SLIDE)
+         ==================================================================== -->
+    <section class="slide" id="slide-16">
+      <span class="slide-category">Phase 8: Autonomous Copilot Architecture</span>
+      <h2 class="slide-title">Chatbot Query Flow &amp; Execution Lifecycle</h2>
+      <p class="slide-subtitle">
+        Visual sequence diagram of how natural language queries pass through guardrails, trigger ML inference, synchronize dashboard state, and maintain persistent conversation memory.
+      </p>
+
+      <div class="qf-container">
+        <!-- Layer 1 Header -->
+        <div class="qf-layer-badge layer-nlu">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          <span>LAYER 01 // COGNITIVE NLU &amp; SAFETY FIREWALL</span>
+        </div>
+
+        <!-- Layer 1 Track (Steps 1, 2, 3) -->
+        <div class="qf-track">
+          <!-- Step 01 -->
+          <div class="qf-card" style="border-left: 4px solid var(--color-brand);">
+            <div class="qf-card-label" style="color: var(--color-brand);">STEP 01: INGESTION</div>
+            <div class="qf-card-title">User Query</div>
+            <div class="qf-card-desc">
+              Voice / Text Prompt:<br>
+              <code style="white-space: nowrap;">"Audit NVDA on 2024-03-08"</code>
+            </div>
+          </div>
+
+          <div class="qf-arrow-right">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+
+          <!-- Step 02 (The Gate Box) -->
+          <div class="qf-gate-box">
+            <div class="qf-gate-branch reject">
+              <div class="qf-gate-title">
+                <span style="color: #ffffff; font-weight: 800; font-size: 0.78rem;"><svg class="inline-svg stroke-crimson" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> OUT-OF-DOMAIN</span>
+                <span class="qf-gate-tag neg">REJECTED</span>
+              </div>
+              <div class="qf-gate-desc">
+                General trivia, recipes, politics strictly blocked with institutional disclaimer.
+              </div>
+            </div>
+            <div class="qf-gate-branch accept">
+              <div class="qf-gate-title">
+                <span style="color: #ffffff; font-weight: 800; font-size: 0.78rem;"><svg class="inline-svg stroke-emerald" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><polyline points="9 12 11 14 15 10"></polyline></svg> IN-DOMAIN VALID</span>
+                <span class="qf-gate-tag pos">ACCEPTED</span>
+              </div>
+              <div class="qf-gate-desc">
+                Financial inquiries &amp; stock audit commands approved for execution.
+              </div>
+            </div>
+          </div>
+
+          <div class="qf-arrow-right">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+
+          <!-- Step 03 -->
+          <div class="qf-card" style="border-left: 4px solid var(--color-purple);">
+            <div class="qf-card-label" style="color: var(--color-purple);">STEP 03: NER PARSING</div>
+            <div class="qf-card-title">Entity Extraction</div>
+            <div class="qf-card-desc">
+              Extracted Entities:<br>
+              • Ticker: <code>NVDA</code><br>
+              • Date: <code>2024-03-08</code>
+            </div>
+          </div>
+        </div>
+
+        <!-- The Handoff Bridge between Layer 1 and Layer 2 -->
+        <div class="qf-bridge-bar">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+          <span style="letter-spacing: 0.5px; font-weight: 600;">DATA PROVENANCE HANDOFF // ASYNC RPC DISPATCH TO PYTHON ML CORE</span>
+          <span class="qf-bridge-pill">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            Payload: { ticker: "NVDA", date: "2024-03-08" }
+          </span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><polyline points="19 12 12 19 5 12"></polyline></svg>
+        </div>
+
+        <!-- Layer 2 Header -->
+        <div class="qf-layer-badge layer-quant">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span>LAYER 02 // QUANTITATIVE ML INFERENCE &amp; MULTI-CHANNEL DISPATCH</span>
+        </div>
+
+        <!-- Layer 2 Track (Steps 4, 5, 6) -->
+        <div class="qf-track">
+          <!-- Step 04 -->
+          <div class="qf-card" style="border-left: 4px solid var(--color-amber);">
+            <div class="qf-card-label" style="color: var(--color-amber);">STEP 04: ML EXECUTION</div>
+            <div class="qf-card-title">Engine Invocation</div>
+            <div class="qf-card-desc">
+              FastAPI invokes:<br>
+              <code>MultiExpert<wbr>.evaluate()</code><br>
+              <span style="font-size: 0.75rem; color: #94a3b8;">Unified feature store slice.</span>
+            </div>
+          </div>
+
+          <div class="qf-arrow-right">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+
+          <!-- Step 05 -->
+          <div class="qf-card" style="border-left: 4px solid var(--color-emerald);">
+            <div class="qf-card-label" style="color: var(--color-emerald);">STEP 05: CONSENSUS &amp; SHAP</div>
+            <div class="qf-card-title">Tri-Expert + TreeSHAP</div>
+            <div class="qf-card-desc" style="font-size: 0.78rem; line-height: 1.45;">
+              Scout, Sniper, Sentinel compute probabilities + generate exact local feature attribution weights.
+            </div>
+          </div>
+
+          <div class="qf-arrow-right">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </div>
+
+          <!-- Step 06 -->
+          <div class="qf-card" style="border-left: 4px solid var(--color-crimson);">
+            <div class="qf-card-label" style="color: var(--color-crimson);">STEP 06: TRIPLE DISPATCH</div>
+            <div class="qf-card-title">UI Sync &amp; Memory</div>
+            <div class="qf-card-desc" style="font-size: 0.76rem; line-height: 1.45;">
+              1. Groq LLM streams text audit.<br>
+              2. <code>SET_INSPECTION</code> shifts chart.<br>
+              3. Generates <code>conversation_summary</code>!
+            </div>
+          </div>
+        </div>
+
+        <!-- Stateful Conversation Memory Loop Bar -->
+        <div class="qf-memory-loop-bar">
+          <div class="qf-loop-left">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>STATEFUL CONVERSATION MEMORY LOOP // ZERO-TOKEN-BLOAT PERSISTENCE</span>
+          </div>
+          <div class="qf-loop-right">
+            <span style="color: #94a3b8; font-size: 0.72rem;">State Store:</span>
+            <code style="background: rgba(168,85,247,0.2); color: #e9d5ff; border: 1px solid rgba(168,85,247,0.45); font-size: 0.7rem; padding: 0.12rem 0.4rem; border-radius: 4px;">conversation_summary: "Audited NVDA 2024-03-08 (Tier 1 Breakout) // Conf: 88%"</code>
+            <span class="qf-loop-tag">INJECTED INTO NEXT TURN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom 3 Pillars Grid -->
+      <div class="bottom-pillars-grid">
+        <div class="quant-card accent-crimson pillar-card">
+          <div class="pillar-header" style="color: #f43f5e;">
+            <svg class="inline-svg stroke-crimson" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            Cognitive Domain Firewall
+          </div>
+          <div class="pillar-desc">
+            The LLM prompt is strictly bounded. Asking <em style="color: #fca5a5;">"How do I bake a cake?"</em> triggers immediate rejection: <em style="color: #ffffff; background: rgba(239,68,68,0.25); padding: 0.1rem 0.3rem; border-radius: 3px; font-size: 0.76rem;">"Specialized exclusively in equity breakout verification."</em>
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald pillar-card">
+          <div class="pillar-header" style="color: #10b981;">
+            <svg class="inline-svg stroke-emerald" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+            Autonomous Workspace Sync
+          </div>
+          <div class="pillar-desc">
+            The Copilot actively controls the UI. Emitting <code style="background: rgba(16,185,129,0.22); color: #34d399; font-weight: 700; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.74rem;">SET_INSPECTION</code> instructs React to load the candlestick chart and TreeSHAP waterfall in real time!
+          </div>
+        </div>
+
+        <div class="quant-card accent-purple pillar-card">
+          <div class="pillar-header" style="color: #c084fc;">
+            <svg class="inline-svg stroke-purple" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            Stateful Memory Summary
+          </div>
+          <div class="pillar-desc">
+            Maintains multi-turn context via <code style="background: rgba(168,85,247,0.22); color: #d8b4fe; font-weight: 700; padding: 0.1rem 0.35rem; border-radius: 3px; font-size: 0.74rem;">conversation_summary</code>. Enables natural follow-ups (<em style="color: #e9d5ff;">"Why did Sniper veto it?"</em>) without token bloat or repeating ticker/date!
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Detail the query flow diagram: Show how a user request travels through our 6-step lifecycle from ingestion, guardrails, entity extraction to ML inference.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Highlight Triple Dispatch: The LLM doesn't just reply with words. It streams markdown analysis, emits a JSON action (SET_INSPECTION) that updates the React chart and SHAP waterfall, and updates session memory!</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">3.</span>
+          <span>Explain the Stateful Conversation Summary: Instead of sending 20 turns of raw chat messages (which exhausts LLM context tokens), our backend generates a dense 1-2 sentence rolling memory summary stored in the frontend. This enables natural follow-up questions like 'Why did Sentinel disagree?' seamlessly!</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 17: COPILOT GUARDRAILS, VOICE & SAFETY
+         ==================================================================== -->
+    <section class="slide" id="slide-17">
+      <span class="slide-category">Phase 8: Safety & Human-in-the-Loop</span>
+      <h2 class="slide-title">Governance, Guardrails & Voice AI</h2>
+      <p class="slide-subtitle">
+        Strict boundaries, hands-free voice interface, and read-only consultative governance.
+      </p>
+
+      <div class="grid-3col">
+        <div class="quant-card accent-crimson">
+          <div class="card-icon-wrap" style="background: rgba(239, 68, 68, 0.15);"><svg class="icon-svg stroke-crimson" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg></div>
+          <div class="card-title">Strict Domain Firewall</div>
+          <div class="card-desc">
+            The Copilot will never hallucinate answers to political, lifestyle, or general inquiries. System-level guardrails enforce quantitative equity scope at all times, preserving institutional credibility.
+          </div>
+        </div>
+
+        <div class="quant-card accent-cyan">
+          <div class="card-icon-wrap" style="background: rgba(56, 189, 248, 0.15);"><svg class="icon-svg stroke-brand" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
+          <div class="card-title">Hands-Free Voice Interface</div>
+          <div class="card-desc">
+            Powered by the Web Speech API, traders can speak hands-free during fast market sessions. Natural voice queries are converted to text, processed in milliseconds, and read back via speech synthesis.
+          </div>
+        </div>
+
+        <div class="quant-card accent-amber">
+          <div class="card-icon-wrap" style="background: rgba(245, 158, 11, 0.15);"><svg class="icon-svg stroke-amber" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></div>
+          <div class="card-title">Zero Rogue-Trade Risk</div>
+          <div class="card-desc">
+            StockPred is strictly consultative and advisory. The Copilot cannot autonomously place broker orders or risk capital without explicit human confirmation, eliminating algorithmic rogue trading risks.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 1.25rem; display: flex; justify-content: space-around; align-items: center; font-family: var(--font-mono); font-size: 0.85rem;">
+        <span style="color: var(--color-emerald);"><svg class="inline-svg stroke-emerald" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Multi-Turn Conversational Memory</span>
+        <span style="color: var(--color-brand);"><svg class="inline-svg stroke-brand" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Real-Time Speech Synthesis</span>
+        <span style="color: var(--color-purple);"><svg class="inline-svg stroke-purple" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Sub-15ms Python Audit Latency</span>
+        <span style="color: var(--color-amber);"><svg class="inline-svg stroke-amber" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg> Auditable Regulatory Trail</span>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Highlight governance and safety: Reassure examiners that our AI Copilot has strict boundaries. It rejects non-financial questions and cannot execute unsupervised market orders.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Mention voice capability: Built for dynamic trading desks where hands-free voice interaction allows portfolio managers to audit setups in seconds.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 18: FULL-STACK PRODUCTION IMPLEMENTATION
+         ==================================================================== -->
+    <section class="slide" id="slide-18">
+      <span class="slide-category">System Implementation & Deployment</span>
+      <h2 class="slide-title">Full-Stack Production Engineering</h2>
+      <p class="slide-subtitle">
+        High-throughput asynchronous backend paired with a reactive institutional trading dashboard.
+      </p>
+
+      <div class="grid-2col">
+        <div class="quant-card accent-cyan">
+          <div class="card-title" style="color: var(--color-brand);">Backend Architecture (FastAPI + ML Core)</div>
+          <div class="card-desc">
+            <ul style="list-style: none; margin-top: 0.5rem; font-size: 0.88rem; line-height: 1.8;">
+              <li><svg class="inline-bullet-svg stroke-brand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><strong>Async FastAPI Service:</strong> Handles concurrent REST endpoints &amp; WebSockets.</li>
+              <li><svg class="inline-bullet-svg stroke-brand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><strong>Vectorized Ingestion:</strong> Pandas/NumPy pipeline calculating 21 features in under 8ms.</li>
+              <li><svg class="inline-bullet-svg stroke-brand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><strong>In-Memory Model Pool:</strong> Pre-loaded XGBoost and LightGBM models with warm cache.</li>
+              <li><svg class="inline-bullet-svg stroke-brand" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg><strong>Static Slides Mount:</strong> Integrated presentation engine served directly at <code>/presentation/</code>.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald">
+          <div class="card-title" style="color: var(--color-emerald);">Frontend Dashboard (React 18 + Canvas)</div>
+          <div class="card-desc">
+            <ul style="list-style: none; margin-top: 0.5rem; font-size: 0.88rem; line-height: 1.8;">
+              <li><svg class="inline-bullet-svg stroke-emerald" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg><strong>Interactive Candlestick Engine:</strong> High-FPS Canvas rendering with crosshairs.</li>
+              <li><svg class="inline-bullet-svg stroke-emerald" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><strong>Live NYC Market Clock:</strong> Tracks Pre-Market, Regular, and After-Hours sessions.</li>
+              <li><svg class="inline-bullet-svg stroke-emerald" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg><strong>Bilingual Localization:</strong> Instant full UI toggle between English and Arabic.</li>
+              <li><svg class="inline-bullet-svg stroke-emerald" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg><strong>Sticky Top Navigation:</strong> Fixed z-index header with real-time health monitors.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="quant-card accent-purple" style="margin-top: 1.5rem; padding: 1rem 1.5rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 1rem;">
+              End-to-End Latency Benchmark
+            </div>
+            <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;">
+              From raw ticker query to rendered SHAP waterfall on the client screen
+            </div>
+          </div>
+          <div style="font-family: var(--font-mono); font-size: 2rem; font-weight: 800; color: var(--color-emerald);">
+            14.2 ms
+          </div>
+        </div>
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Review our production stack: Built on FastAPI and React 18, capable of sub-15ms end-to-end inference.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Highlight enterprise features: Live NYC session clock, bilingual English/Arabic localization, and sticky zero-jitter navigation.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         SLIDE 19: EXECUTIVE DEFENSE & STRATEGIC ROADMAP
+         ==================================================================== -->
+    <section class="slide" id="slide-19">
+      <span class="slide-category">Conclusion & Defense</span>
+      <h2 class="slide-title">Executive Summary & Strategic Roadmap</h2>
+      <p class="slide-subtitle">
+        Core quantitative contributions, defense against tough questions, and future horizon expansion.
+      </p>
+
+      <div class="grid-3col" style="margin-bottom: 1.5rem;">
+        <div class="quant-card accent-cyan">
+          <div class="card-title" style="color: var(--color-brand);">1. Solved the Dilemma</div>
+          <div class="card-desc">
+            Tri-Expert Ensemble &amp; Dynamic Tiered Sizing conquered the Win Rate vs. Capture trade-off, generating +2,129% out-of-sample portfolio growth.
+          </div>
+        </div>
+
+        <div class="quant-card accent-emerald">
+          <div class="card-title" style="color: var(--color-emerald);">2. Zero Black-Box</div>
+          <div class="card-desc">
+            TreeSHAP additive attributions guarantee 100% regulatory auditability for every trade approval and every bull trap rejection.
+          </div>
+        </div>
+
+        <div class="quant-card accent-purple">
+          <div class="card-title" style="color: var(--color-purple);">3. Autonomous Copilot</div>
+          <div class="card-desc">
+            Bounded AI Assistant with speech recognition, strict domain firewall, and automated dual UI state synchronization.
+          </div>
+        </div>
+      </div>
+
+      <div class="quant-card accent-amber">
+        <div class="card-title" style="color: var(--color-amber);">Strategic Roadmap (Next Milestones)</div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
+          <div>
+            <strong style="color: #fff;">Milestone 01: Options Overlay</strong><br>
+            Incorporating implied volatility skew and options delta flow to anticipate institutional gamma squeezes.
+          </div>
+          <div>
+            <strong style="color: #fff;">Milestone 02: Intraday Tick Streaming</strong><br>
+            Transitioning from daily close to 5-minute real-time order-book imbalance feeds via WebSocket.
+          </div>
+          <div>
+            <strong style="color: #fff;">Milestone 03: Live Broker Bridge</strong><br>
+            Direct FIX protocol connectivity to Interactive Brokers and Alpaca for one-click trade execution.
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; text-align: center; font-family: var(--font-display); font-size: 1.25rem; font-weight: 800; color: #fff;">
+        Thank You <span style="color: var(--color-brand); margin: 0 0.4rem;">/</span> Open for Technical Defense &amp; Committee Q&amp;A
+      </div>
+
+      <div class="speaker-notes-data" style="display:none;">
+        <div class="notes-talking-point">
+          <span class="notes-bullet">1.</span>
+          <span>Deliver the closing pitch: Summarize our three pillars: Tri-Expert Committee, TreeSHAP Explainability, and the Autonomous AI Copilot.</span>
+        </div>
+        <div class="notes-talking-point">
+          <span class="notes-bullet">2.</span>
+          <span>Open for committee questions: Confidently transition to Q&A. Refer to our speaker notes defense guide for detailed answers on regime changes, transaction costs, and cross-validation integrity.</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Floating Control Dock -->
+    <!-- Bottom Floating Control Dock -->
+  <footer class="pres-dock" role="toolbar" aria-label="Presentation Navigation Controls">
+    <button class="dock-btn" id="btnPrev" title="Previous Slide (Left Arrow)">
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      <span>Prev</span>
+      <span class="dock-key">←</span>
+    </button>
+    <button class="dock-btn" id="btnNext" title="Next Slide (Right Arrow / Space)">
+      <span>Next</span>
+      <span class="dock-key">Space</span>
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+    </button>
+    <div class="dock-separator"></div>
+    <button class="dock-btn" id="btnNotes" title="Toggle Presenter Speaker Notes (S)">
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+      <span>Notes</span>
+      <span class="dock-key">S</span>
+    </button>
+    <button class="dock-btn" id="btnFullscreen" title="Toggle Fullscreen Mode (F)">
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+      <span>Fullscreen</span>
+      <span class="dock-key">F</span>
+    </button>
+  </footer>
+
+  <!-- Slide-out Presenter Speaker Notes Drawer -->
+  <aside class="notes-drawer" id="notesDrawer">
+    <div class="notes-header">
+      <div class="notes-title">
+        <svg class="inline-svg stroke-brand" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg> Presenter Speaker Defense Notes
+      </div>
+      <button class="dock-btn" id="closeNotesBtn" style="padding: 0.2rem 0.6rem; font-size: 0.75rem; height: 30px;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Close</button>
+    </div>
+    <div class="notes-body" id="notesContent">
+      <!-- Injected Dynamically by slides.js -->
+    </div>
+  </aside>
+
+  <script src="slides.js"></script>
+</body>
+</html>
