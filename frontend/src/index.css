@@ -356,11 +356,11 @@ body {
 }
 
 .nav-status-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-wrap: nowrap;
-  flex-shrink: 0;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  flex-wrap: nowrap !important;
+  flex-shrink: 0 !important;
 }
 
 html[dir="rtl"] body {
@@ -1200,12 +1200,10 @@ html[dir="rtl"] .control-select {
   }
 
   .nav-status-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    flex-wrap: nowrap !important;
   }
 
   .controls-panel {
@@ -1257,8 +1255,10 @@ html[dir="rtl"] .control-select {
   }
 
   .nav-status-group {
-    flex-wrap: wrap;
-    gap: 0.4rem;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    flex-wrap: nowrap !important;
   }
 
   .market-clock-pill {
@@ -1848,5 +1848,118 @@ html[dir="rtl"] .control-select {
   }
   .market-clock-pill .nav-pill-separator:last-of-type {
     display: none;
+  }
+}
+
+/* ==========================================================================
+   ULTRA-COMPACT BULLETPROOF NAVBAR (ONE-LINE SIDE-BY-SIDE GUARANTEE)
+   ========================================================================== */
+.terminal-nav {
+  min-height: 52px;
+  height: auto;
+  box-sizing: border-box;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 0.75rem !important;
+  flex-wrap: nowrap !important;
+}
+
+.brand-section {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.65rem !important;
+  flex-shrink: 0 !important;
+}
+
+.brand-title {
+  font-size: 0.95rem !important;
+  white-space: nowrap !important;
+}
+
+.nav-status-group {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.45rem !important;
+  flex-wrap: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.market-clock-pill,
+.system-status-pill,
+.nav-presentation-btn,
+.lang-switcher {
+  height: 32px !important;
+  box-sizing: border-box !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+}
+
+.market-clock-pill {
+  padding: 0 0.65rem !important;
+  font-size: 0.72rem !important;
+  gap: 0.4rem !important;
+}
+
+.clock-time-segment {
+  font-size: 0.72rem !important;
+  gap: 0.3rem !important;
+}
+
+.market-status-tag {
+  font-size: 0.62rem !important;
+  padding: 0.12rem 0.45rem !important;
+}
+
+.market-countdown-segment {
+  font-size: 0.68rem !important;
+  padding: 0.15rem 0.45rem !important;
+}
+
+.system-status-pill {
+  padding: 0 0.7rem !important;
+  font-size: 0.7rem !important;
+  gap: 0.4rem !important;
+}
+
+.nav-presentation-btn {
+  height: 32px !important;
+  padding: 0 0.7rem !important;
+  font-size: 0.72rem !important;
+  gap: 0.35rem !important;
+}
+
+.lang-switcher {
+  height: 32px !important;
+  padding: 2px !important;
+  gap: 2px !important;
+}
+
+.lang-btn {
+  height: 26px !important;
+  padding: 0 0.6rem !important;
+  font-size: 0.7rem !important;
+}
+
+/* Tablet & Smaller Screens: Graceful Clean Stacking */
+@media (max-width: 950px) {
+  .market-countdown-segment,
+  .countdown-sep {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .terminal-nav {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+  .nav-status-group {
+    width: 100% !important;
+    justify-content: space-between !important;
+    overflow-x: auto !important;
+    padding-bottom: 2px !important;
   }
 }

@@ -194,9 +194,8 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
             title={`${t('marketScheduleTooltip')}\n• ${t('marketTimeNYC')}: ${timeData.nyDate} - ${timeData.nyTime}\n• ${timeData.targetLabel}\n• ${timeData.actionLabel}: ${timeData.countdown}\n• Local Time: ${timeData.localTime}`}
           >
             <div className="clock-time-segment">
-              <Clock size={13} className="clock-icon" />
+              <Clock size={12} className="clock-icon" />
               <span className="clock-city">NYC</span>
-              <span className="clock-date">{timeData.nyDate} · </span>
               <span className="clock-time">{timeData.nyTime}</span>
             </div>
 
@@ -214,11 +213,10 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
               {t(timeData.statusKey)}
             </span>
 
-            <span className="nav-pill-separator" />
+            <span className="nav-pill-separator countdown-sep" />
 
             <div className="market-countdown-segment" title={timeData.targetLabel}>
-              <Timer size={12} className="countdown-timer-icon" />
-              <span className="countdown-label">{timeData.actionLabel}:</span>
+              <Timer size={11} className="countdown-timer-icon" />
               <span className="countdown-val">{timeData.countdown}</span>
             </div>
           </div>
@@ -226,8 +224,9 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
           {/* Engine Status */}
           <div className="system-status-pill" title={t('engineOnline')}>
             <span className="pulse-dot"></span>
-            <span className="engine-status-text engine-status-full">{t('engineOnline')}</span>
-            <span className="engine-status-text engine-status-compact">{t('engineOnlineCompact') || '3 EXPERTS'}</span>
+            <span className="engine-status-text">
+              {lang === 'ar' ? '3 خبراء متصلون' : '3 EXPERTS ONLINE'}
+            </span>
           </div>
 
           {/* Presentation Deck Link */}
@@ -238,8 +237,8 @@ export default function Navbar({ presets, selectedPreset, onSelectPreset }) {
             className="nav-presentation-btn"
             title={lang === 'ar' ? 'فتح العرض التقديمي التنفيذي للمشروع' : 'Open Executive Presentation Deck (19 Slides)'}
           >
-            <Sparkles size={13} className="nav-btn-icon" />
-            <span>{lang === 'ar' ? 'العرض التقديمي' : 'Slides'}</span>
+            <Sparkles size={12} className="nav-btn-icon" />
+            <span>{lang === 'ar' ? 'العرض' : 'Slides'}</span>
           </a>
 
           {/* Full Language Switcher Toggle */}
