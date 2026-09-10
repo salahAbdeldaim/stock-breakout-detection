@@ -509,6 +509,9 @@ def copilot_chat(req: CopilotChatRequest):
         raise HTTPException(status_code=400, detail="Empty query provided.")
 
     lang = req.language if req.language in ["ar", "en"] else "ar"
+    # Auto-detect if user query contains Arabic characters (guarantees Arabic reply whenever user speaks Arabic)
+    is_arabic_query = bool(re.search(r'[؀-ۿ]', user_msg))
+    effective_lang = "ar" if (is_arabic_query or lang == "ar") else "en"
     available_tickers = list(STOCK_METADATA.keys())
 
     # Step 1: Structured Intent, Scope & Entity Parsing with Typo Tolerance & Conversation Memory
@@ -590,7 +593,15 @@ DO NOT output markdown code blocks. Output raw JSON only."""
 
     intent = parsed.get("intent", "audit")
     target_ticker_raw = parsed.get("ticker")
-    lang_instruction = "Respond in fluent, professional institutional Arabic." if lang == "ar" else "Respond in fluent, professional institutional English."
+    if effective_lang == "ar":
+        lang_instruction = """CRITICAL LANGUAGE MANDATE:
+- YOU MUST RESPOND ENTIRELY IN NATURAL, PROFESSIONAL, FLUENT ARABIC (باللغة العربية الفصحى المؤسسية).
+- DO NOT WRITE ENGLISH IN THE 'reply' FIELD (except for stock ticker symbols like NVDA, AAPL, TSLA and standard indicator acronyms).
+- Every single sentence in 'reply' MUST be in Arabic."""
+    else:
+        lang_instruction = """CRITICAL LANGUAGE MANDATE:
+- Respond in fluent, professional institutional English.
+- The reply MUST be in English."""
 
     # Check for conversational greeting, general chitchat, or prompt injection
     # If the user is greeting, asking general questions, or asking domain QA without explicitly requesting an audit:
@@ -706,10 +717,21 @@ Return a valid JSON object with:
             "Error": audit_err or "Historical date not present in dataset"
         }
 
-    lang_instruction = "Respond in fluent, professional institutional Arabic." if lang == "ar" else "Respond in fluent, professional institutional English."
+    if effective_lang == "ar":
+        synth_lang_instruction = """CRITICAL LANGUAGE MANDATE:
+- YOU MUST WRITE THE ENTIRE FINANCIAL AUDIT EXPLANATION IN PROFESSIONAL, INSTITUTIONAL ARABIC (باللغة العربية الفصحى المالية).
+- Clearly explain the consensus decision in Arabic (مثل: اختراق عالي الثقة من الدرجة الأولى Tier 1، أو فخ ثيران / اختراق وهمي Bull Trap، أو تماسك سعري).
+- Cite specific metrics in Arabic (سعر الإغلاق، مستوى المقاومة، مضاعف السيولة، موضع الإغلاق داخل شمعة اليوم).
+- Explain TreeSHAP factors in Arabic (عوامل الدعم الإيجابية وعوامل الشك أو السلبية).
+- DO NOT OUTPUT ENGLISH TEXT IN THE 'reply' FIELD except for ticker symbols (NVDA, AAPL, etc.) and indicator acronyms (RSI, ATR, SHAP, MA).
+- Every single sentence in 'reply' MUST be in Arabic."""
+    else:
+        synth_lang_instruction = """CRITICAL LANGUAGE MANDATE:
+- Respond in fluent, professional institutional English.
+- The reply MUST be in English."""
     
     synth_system_prompt = f"""You are the Senior Quantitative Financial Analyst for StockPred (developed by Team Stockbrokers).
-{lang_instruction}
+{synth_lang_instruction}
 Session Conversation Memory: {req.conversation_summary or 'None.'}
 
 Explain the quantitative audit result strictly and factually based on the provided audit data.
@@ -745,7 +767,7 @@ Return a valid JSON object with:
         print(f"Synthesis fallback: {e}")
         reply_text = (
             f"تم تدقيق سهم {target_ticker} بتاريخ {target_date}. القرار: {audit_data.get('Consensus', {}).get('Tier', 'N/A') if audit_data else 'غير متاح'}."
-            if lang == "ar"
+            if effective_lang == "ar"
             else f"Audited {target_ticker} on {target_date}. Decision: {audit_data.get('Consensus', {}).get('Tier', 'N/A') if audit_data else 'N/A'}."
         )
 
