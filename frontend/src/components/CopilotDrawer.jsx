@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Bot, Sparkles, Mic, MicOff, Send, X, Trash2, ExternalLink, RefreshCw, Cpu, Maximize2, Minimize2 } from 'lucide-react';
+import { Bot, Sparkles, Mic, MicOff, Send, X, Trash2, ExternalLink, RefreshCw, Cpu, Maximize2, Minimize2, Loader2 } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 export default function CopilotDrawer({
