@@ -1963,3 +1963,503 @@ html[dir="rtl"] .control-select {
     padding-bottom: 2px !important;
   }
 }
+
+
+/* RTL Dashboard Grid: Place Decision/Analysis Column on the RIGHT, Chart on the LEFT */
+html[dir="rtl"] .dashboard-grid {
+  grid-template-columns: 1.2fr 1.8fr;
+}
+
+html[dir="rtl"] .dashboard-grid > .analysis-column {
+  grid-column: 1; /* In RTL, column 1 is on the RIGHT side */
+}
+
+html[dir="rtl"] .dashboard-grid > :first-child {
+  grid-column: 2; /* In RTL, column 2 is on the LEFT side */
+}
+
+@media (max-width: 1280px) {
+  html[dir="rtl"] .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+  html[dir="rtl"] .dashboard-grid > .analysis-column,
+  html[dir="rtl"] .dashboard-grid > :first-child {
+    grid-column: auto;
+  }
+}
+
+
+/* ==========================================================================
+   Custom Searchable Stock Dropdown
+   ========================================================================== */
+.custom-stock-dropdown-container {
+  position: relative;
+  min-width: 260px;
+}
+
+.stock-select-trigger {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  color: var(--text-main);
+  padding: 0.55rem 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 42px;
+  box-sizing: border-box;
+}
+
+.stock-select-trigger:hover,
+.stock-select-trigger.active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.stock-trigger-info {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  overflow: hidden;
+}
+
+.stock-badge-ticker {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.stock-trigger-name {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.stock-trigger-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.stock-trigger-price {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.stock-trigger-chevron {
+  color: #38bdf8;
+  transition: transform 0.2s ease;
+}
+
+.stock-trigger-chevron.open {
+  transform: rotate(180deg);
+}
+
+/* Custom Stock Popover Dropdown Menu */
+.custom-stock-popover {
+  position: absolute;
+  top: calc(100% + 6px);
+  inset-inline-start: 0;
+  width: 320px;
+  max-width: 90vw;
+  background: #0b1324;
+  border: 1px solid var(--border-active);
+  border-radius: 10px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(56, 189, 248, 0.15);
+  backdrop-filter: blur(16px);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: popoverFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stock-popover-search {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(15, 23, 42, 0.7);
+}
+
+.stock-popover-search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  font-size: 0.82rem;
+  outline: none;
+  font-family: inherit;
+}
+
+.stock-popover-search-input::placeholder {
+  color: #64748b;
+}
+
+.stock-search-clear-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: #94a3b8;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.stock-search-clear-btn:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.stock-popover-list {
+  max-height: 280px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 0.35rem;
+}
+
+.stock-popover-list::-webkit-scrollbar {
+  width: 5px;
+}
+.stock-popover-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.2);
+}
+.stock-popover-list::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+}
+
+.stock-popover-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.stock-popover-item:hover {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.stock-popover-item.selected {
+  background: rgba(56, 189, 248, 0.18);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.stock-item-main {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  overflow: hidden;
+}
+
+.stock-item-ticker {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.8rem;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.1);
+  padding: 2px 5px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.stock-item-name {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 140px;
+}
+
+.stock-item-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.stock-item-price {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.stock-item-change {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.stock-item-change.up {
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+}
+
+.stock-item-change.down {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.12);
+}
+
+.stock-item-check {
+  color: #38bdf8;
+}
+
+.stock-popover-empty {
+  padding: 1.5rem;
+  text-align: center;
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   Refined Decision Card Styles (Sleek, No nested boxes)
+   ========================================================================== */
+.decision-card {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-inline-start: 4px solid #38bdf8;
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.decision-card.tier-1 {
+  border-inline-start-color: #10b981;
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.07) 0%, rgba(15, 23, 42, 0.75) 60%);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.decision-card.tier-2 {
+  border-inline-start-color: #f59e0b;
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.07) 0%, rgba(15, 23, 42, 0.75) 60%);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.decision-card.tier-3 {
+  border-inline-start-color: #ef4444;
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.07) 0%, rgba(15, 23, 42, 0.75) 60%);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.decision-card.consolidation {
+  border-inline-start-color: #38bdf8;
+  background: linear-gradient(180deg, rgba(56, 189, 248, 0.05) 0%, rgba(15, 23, 42, 0.75) 60%);
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.decision-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.decision-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.decision-icon-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.decision-title-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.decision-main-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f8fafc;
+  letter-spacing: 0.3px;
+}
+
+.decision-sub-title {
+  font-size: 0.72rem;
+  color: #38bdf8;
+  font-weight: 500;
+}
+
+.decision-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-cyan {
+  background: #38bdf8;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+/* Consolidation Content (Clean, No Nested Box) */
+.decision-content-consolidation {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.consolidation-lead-status {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.88rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.screener-checkpoints-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.screener-checkpoints-header {
+  font-size: 0.72rem;
+  color: #f87171;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.screener-checkpoints-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.screener-checkpoint-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.45rem 0.65rem;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.05);
+  border-inline-start: 2px solid #ef4444;
+  transition: background 0.15s ease;
+}
+
+.screener-checkpoint-row:hover {
+  background: rgba(239, 68, 68, 0.09);
+}
+
+.checkpoint-icon {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.checkpoint-text {
+  font-size: 0.82rem;
+  color: #fca5a5;
+  line-height: 1.45;
+}
+
+/* Candidate Strips */
+.decision-content-candidate {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.action-guidance-strip {
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #f1f5f9;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+}
+
+.risk-management-strip {
+  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.65rem 0.85rem;
+  border-radius: 6px;
+}
+
+.rationale-strip {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  line-height: 1.45;
+}
+

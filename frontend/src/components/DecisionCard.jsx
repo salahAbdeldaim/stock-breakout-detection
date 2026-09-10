@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, TrendingUp, Compass, ShieldAlert, XCircle } from 'lucide-react';
+import { ShieldCheck, TrendingUp, Compass, ShieldAlert, XCircle, AlertCircle } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 export default function DecisionCard({ auditResult }) {
@@ -29,14 +29,17 @@ export default function DecisionCard({ auditResult }) {
 
   return (
     <div className={cardClass}>
+      {/* Header Section */}
       <div className="decision-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <Compass size={18} color="#38bdf8" />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#f8fafc' }}>
+        <div className="decision-title-group">
+          <div className="decision-icon-badge">
+            <Compass size={18} color="#38bdf8" />
+          </div>
+          <div className="decision-title-texts">
+            <span className="decision-main-title">
               {t('tacticalVerdictTitle')}
             </span>
-            <span style={{ fontSize: '0.72rem', color: '#38bdf8' }}>
+            <span className="decision-sub-title">
               {t('tacticalVerdictSubtitle')}
             </span>
           </div>
@@ -45,7 +48,7 @@ export default function DecisionCard({ auditResult }) {
         {/* Tier / State Badge */}
         {!isCandidate ? (
           <span className="decision-tier-badge badge-consolidation">
-            <Compass size={14} />
+            <span className="badge-dot dot-cyan"></span>
             {t('badgeConsolidation')}
           </span>
         ) : isTier1 ? (
@@ -68,7 +71,7 @@ export default function DecisionCard({ auditResult }) {
 
       {/* When Breakout Candidate: Dynamic Tiered Position Sizing */}
       {isCandidate && consensus && (
-        <>
+        <div className="decision-content-candidate">
           <div className="allocation-box">
             <div className="alloc-item">
               <span className="alloc-label">{t('allocationLabel')}</span>
@@ -90,49 +93,47 @@ export default function DecisionCard({ auditResult }) {
             </div>
           </div>
 
-          <div className="action-guidance">
+          <div className="action-guidance-strip">
             <strong style={{ color: '#f8fafc' }}>{t('executionGuidanceLabel')} </strong>
             <span>{helpers.translateActionGuidance(consensus.Action_Guidance)}</span>
           </div>
 
-          <div
-            style={{
-              fontSize: '0.8rem',
-              fontFamily: 'var(--font-mono)',
-              background: 'rgba(0,0,0,0.25)',
-              padding: '0.65rem 0.85rem',
-              borderRadius: '6px',
-              borderInlineStart: `3px solid ${isTier1 ? '#10b981' : isTier2 ? '#f59e0b' : '#ef4444'}`
-            }}
-          >
+          <div className="risk-management-strip" style={{
+            borderInlineStart: `3px solid ${isTier1 ? '#10b981' : isTier2 ? '#f59e0b' : '#ef4444'}`
+          }}>
             <strong style={{ color: '#f8fafc' }}>{t('riskManagementLabel')} </strong>
             <span>{helpers.translateRiskManagement(consensus.Risk_Management)}</span>
           </div>
 
-          <div style={{ fontSize: '0.78rem', color: '#94a3b8', lineHeight: 1.45 }}>
+          <div className="rationale-strip">
             <em>{helpers.translateRationale(consensus.Rationale)}</em>
           </div>
-        </>
+        </div>
       )}
 
-      {/* When NOT Breakout Candidate: Screener Explanations */}
+      {/* When NOT Breakout Candidate: Screener Explanation (Clean, No Nested Clunky Box) */}
       {!isCandidate && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <div style={{ fontSize: '0.88rem', color: '#94a3b8', lineHeight: 1.4 }}>
-            {lang === 'ar' ? t('statusMessageConsolidation') : auditResult.Status_Message}
+        <div className="decision-content-consolidation">
+          {/* Main Status Text */}
+          <div className="consolidation-lead-status">
+            <AlertCircle size={15} color="#38bdf8" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <span>{lang === 'ar' ? t('statusMessageConsolidation') : auditResult.Status_Message}</span>
           </div>
 
+          {/* Clean Checklist of Screener Reasons */}
           {auditResult.Screening_Failures && auditResult.Screening_Failures.length > 0 && (
-            <div className="screening-failures-list">
-              <div style={{ fontSize: '0.72rem', color: '#ef4444', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>
-                {t('screenerFailuresTitle')}
+            <div className="screener-checkpoints-section">
+              <div className="screener-checkpoints-header">
+                {t('screeningCheckpointsTitle')}
               </div>
-              {auditResult.Screening_Failures.map((reason, i) => (
-                <div key={i} className="screening-failure-item">
-                  <XCircle size={14} color="#ef4444" style={{ flexShrink: 0, marginTop: '2px' }} />
-                  <span>{helpers.translateScreenerReason(reason)}</span>
-                </div>
-              ))}
+              <div className="screener-checkpoints-list">
+                {auditResult.Screening_Failures.map((reason, i) => (
+                  <div key={i} className="screener-checkpoint-row">
+                    <XCircle size={14} color="#f87171" className="checkpoint-icon" />
+                    <span className="checkpoint-text">{helpers.translateScreenerReason(reason)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

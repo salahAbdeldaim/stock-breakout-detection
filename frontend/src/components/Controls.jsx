@@ -1,5 +1,5 @@
-import React from 'react';
-import { Search, Calendar, Cpu, Play, RefreshCw } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, Calendar, Cpu, Play, RefreshCw, ChevronDown, Check, X } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 export default function Controls({
@@ -15,27 +15,153 @@ export default function Controls({
   loading,
   refreshing
 }) {
-  const { t } = useLanguage();
+  const { lang, t } = useLanguage();
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const dropdownRef = useRef(null);
+  const searchInputRef = useRef(null);
+
+  // Close dropdown on click outside or Escape
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    }
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        setDropdownOpen(false);
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener('keydown', handleKeyDown);
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [dropdownOpen]);
+
+  const currentStock = stocks.find((s) => s.ticker === selectedTicker) || stocks[0] || {
+    ticker: selectedTicker,
+    name: selectedTicker,
+    last_price: ''
+  };
+
+  const filteredStocks = stocks.filter((stock) => {
+    if (!searchTerm.trim()) return true;
+    const q = searchTerm.trim().toLowerCase();
+    return (
+      stock.ticker.toLowerCase().includes(q) ||
+      (stock.name && stock.name.toLowerCase().includes(q))
+    );
+  });
 
   return (
     <div className="controls-panel">
-      {/* Stock Selector */}
-      <div className="control-item">
+      {/* Custom Searchable Stock Dropdown */}
+      <div className="control-item custom-stock-dropdown-container" ref={dropdownRef}>
         <label className="control-label">
           <Search size={12} style={{ display: 'inline', marginInlineEnd: '4px' }} />
           {t('assetEquity')}
         </label>
-        <select
-          className="control-select"
-          value={selectedTicker}
-          onChange={(e) => setSelectedTicker(e.target.value)}
+
+        <button
+          type="button"
+          className={`stock-select-trigger ${dropdownOpen ? 'active' : ''}`}
+          onClick={() => {
+            setDropdownOpen(!dropdownOpen);
+            setSearchTerm('');
+          }}
+          aria-haspopup="listbox"
+          aria-expanded={dropdownOpen}
         >
-          {stocks.map((stock) => (
-            <option key={stock.ticker} value={stock.ticker}>
-              {stock.ticker} - {stock.name} (${stock.last_price})
-            </option>
-          ))}
-        </select>
+          <div className="stock-trigger-info">
+            <span className="stock-badge-ticker">{currentStock.ticker}</span>
+            <span className="stock-trigger-name">{currentStock.name}</span>
+          </div>
+          <div className="stock-trigger-meta">
+            {currentStock.last_price && (
+              <span className="stock-trigger-price">${Number(currentStock.last_price).toFixed(2)}</span>
+            )}
+            <ChevronDown size={14} className={`stock-trigger-chevron ${dropdownOpen ? 'open' : ''}`} />
+          </div>
+        </button>
+
+        {dropdownOpen && (
+          <div className="custom-stock-popover" role="listbox">
+            {/* Search filter inside dropdown */}
+            <div className="stock-popover-search">
+              <Search size={14} color="#64748b" style={{ flexShrink: 0 }} />
+              <input
+                ref={searchInputRef}
+                type="text"
+                className="stock-popover-search-input"
+                placeholder={t('searchStockPlaceholder')}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  className="stock-search-clear-btn"
+                  onClick={() => setSearchTerm('')}
+                  title="Clear"
+                >
+                  <X size={12} />
+                </button>
+              )}
+            </div>
+
+            {/* List of stocks */}
+            <div className="stock-popover-list">
+              {filteredStocks.length === 0 ? (
+                <div className="stock-popover-empty">
+                  {t('noStocksFound')}
+                </div>
+              ) : (
+                filteredStocks.map((stock) => {
+                  const isSelected = stock.ticker === selectedTicker;
+                  const price = stock.last_price ? `$${Number(stock.last_price).toFixed(2)}` : '';
+                  const changePct = stock.change_pct !== undefined ? stock.change_pct : null;
+                  const isPositive = changePct !== null && changePct >= 0;
+
+                  return (
+                    <div
+                      key={stock.ticker}
+                      role="option"
+                      aria-selected={isSelected}
+                      className={`stock-popover-item ${isSelected ? 'selected' : ''}`}
+                      onClick={() => {
+                        setSelectedTicker(stock.ticker);
+                        setDropdownOpen(false);
+                        setSearchTerm('');
+                      }}
+                    >
+                      <div className="stock-item-main">
+                        <span className="stock-item-ticker">{stock.ticker}</span>
+                        <span className="stock-item-name">{stock.name}</span>
+                      </div>
+                      <div className="stock-item-right">
+                        {price && <span className="stock-item-price">{price}</span>}
+                        {changePct !== null && (
+                          <span className={`stock-item-change ${isPositive ? 'up' : 'down'}`}>
+                            {isPositive ? '+' : ''}{Number(changePct).toFixed(2)}%
+                          </span>
+                        )}
+                        {isSelected && <Check size={14} className="stock-item-check" />}
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Date Selector */}
@@ -51,9 +177,7 @@ export default function Controls({
           onClick={(e) => {
             try {
               e.currentTarget.showPicker();
-            } catch (err) {
-              // Browser fallback
-            }
+            } catch (err) {}
           }}
           onChange={(e) => setSelectedDate(e.target.value)}
         />

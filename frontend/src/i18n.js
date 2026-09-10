@@ -45,6 +45,9 @@ export const translations = {
 
     // Controls
     assetEquity: "Asset / Equity (50 US Stocks)",
+    searchStockPlaceholder: "Search ticker or company name...",
+    noStocksFound: "No stocks found matching search",
+    screeningCheckpointsTitle: "Screening Checkpoints & Gate Evaluation:",
     inspectionDate: "Inspection Date",
     todayLatest: "Today / Latest",
     setToLatest: "Set to Latest",
