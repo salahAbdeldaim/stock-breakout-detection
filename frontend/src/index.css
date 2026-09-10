@@ -682,23 +682,25 @@ html[dir="rtl"] body {
   box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.25);
 }
 
-/* High-contrast bright calendar picker icon */
+/* Completely remove calendar picker square box */
 .control-input::-webkit-calendar-picker-indicator {
-  filter: invert(1) brightness(1.2);
+  display: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  opacity: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
   cursor: pointer;
-  padding: 3px;
-  border-radius: 4px;
-  opacity: 0.9;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  transition: all 0.2s ease;
 }
 
-.control-input::-webkit-calendar-picker-indicator:hover {
-  opacity: 1;
-  background: rgba(56, 189, 248, 0.25);
-  filter: invert(1) brightness(1.5);
-  border-color: #38bdf8;
+.control-input::-webkit-inner-spin-button,
+.control-input::-webkit-clear-button {
+  display: none !important;
+  -webkit-appearance: none !important;
 }
 
 /* Custom crisp dropdown chevron arrow */
